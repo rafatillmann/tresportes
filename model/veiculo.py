@@ -33,7 +33,7 @@ class Veiculo:
 
     @property
     def modelo(self):
-        return self.__marca
+        return self.__modelo
 
     @modelo.setter
     def modelo(self, modelo: str):
