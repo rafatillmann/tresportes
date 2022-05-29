@@ -1,5 +1,5 @@
 
-class controllerUsuario():
+class ControllerUsuario():
 
     def __init__(self):
         self.__daoDestinatario = None
