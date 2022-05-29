@@ -1,9 +1,9 @@
 import PySimpleGUI as sg
 
-class ViewInitial():
+class ViewLogin():
 
     def login(self):
-        sg.ChangeLookAndFeel('Tan')
+        sg.ChangeLookAndFeel('System Default 1')
         layout = [
             [sg.Text('Login', font=(25))],
             [sg.Text('Email', size=(15, 1)),
@@ -13,7 +13,7 @@ class ViewInitial():
             [sg.Submit('OK'), sg.Cancel('Cancelar', key='cancel')]
         ]
 
-        window = sg.Window('Administrador').Layout(layout)
+        window = sg.Window('Login').Layout(layout)
         button, values = window.Read()
 
         window.close()

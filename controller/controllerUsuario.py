@@ -1,3 +1,4 @@
+import util.session 
 
 class ControllerUsuario():
 
@@ -11,11 +12,14 @@ class ControllerUsuario():
         try:
             if isinstance(email, str) and isinstance(password, str):
                 user = self.__daoDestinatario.readByEmail(email)
-                
+                type = "Destinatario"
+
                 if(not user):
                     user = self.__daoGerente.readByEmail(email)
+                    type = "Gerente"
                 if(not user):
                     user = self.__daoMotorista.readByEmail(email)
+                    type = "Motorista"
                     
                 if(user):
                     if(user.password == password):
