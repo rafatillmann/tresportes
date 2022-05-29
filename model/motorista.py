@@ -1,6 +1,7 @@
 from model.veiculo import Veiculo
 from model.usuario import Usuario
 
+
 class Motorista(Usuario):
     def __init__(self, nome: str, email: str, cpf: int, senha: str, carga_horaria: int, veiculo: Veiculo):
         super().__init__(nome, email, cpf, senha)

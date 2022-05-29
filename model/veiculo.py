@@ -1,11 +1,14 @@
 class Veiculo:
-    def __init__(self, tipo: str, marca: str, modelo: str, placa: str, capacidade: int):
+    def __init__(self, tipo: str, marca: str, modelo: str, placa: str, capacidade: int, largura: int, comprimento: int, altura: int):
         self.__id = None
         self.__tipo = tipo
         self.__marca = marca
         self.__modelo = modelo
         self.__placa = placa
         self.__capacidade = capacidade
+        self.__largura = largura
+        self.__comprimento = comprimento
+        self.__altura = altura
 
     @property
     def id(self):
@@ -54,3 +57,27 @@ class Veiculo:
     @capacidade.setter
     def capacidade(self, capacidade: str):
         self.__capacidade = capacidade
+
+    @property
+    def largura(self):
+        return self.__largura
+
+    @largura.setter
+    def largura(self, largura: str):
+        self.__largura = largura
+
+    @property
+    def comprimento(self):
+        return self.__comprimento
+
+    @comprimento.setter
+    def comprimento(self, comprimento: str):
+        self.__comprimento = comprimento
+
+    @property
+    def altura(self):
+        return self.__altura
+
+    @altura.setter
+    def altura(self, altura: str):
+        self.__altura = altura

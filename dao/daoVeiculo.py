@@ -11,7 +11,7 @@ class DaoVeiculo(AbstractDao):
         self.__records = []
 
         try:
-            fields = 'id integer NOT NULL, tipo varchar(255) NOT NULL, marca varchar(255) NOT NULL, modelo varchar(255) NOT NULL, placa varchar(255) NOT NULL, capacidade integer NOT NULL, PRIMARY KEY(id AUTOINCREMENT)'
+            fields = 'id integer NOT NULL, tipo varchar(255) NOT NULL, marca varchar(255) NOT NULL, modelo varchar(255) NOT NULL, placa varchar(255) NOT NULL, capacidade integer NOT NULL, largura integer NOT NULL, comprimento integer NOT NULL, altura integer NOT NULL, PRIMARY KEY(id AUTOINCREMENT)'
             self.__database.cursor.execute(
                 f'CREATE TABLE IF NOT EXISTS {self.__table_name} ({fields})')
             self.__database.connection.commit()
@@ -20,8 +20,8 @@ class DaoVeiculo(AbstractDao):
             self.__database.connection.rollback()
 
     def insert(self, veiculo: Veiculo):
-        fields = 'tipo, marca, modelo, placa, capacidade'
-        values = f'"{veiculo.tipo}", "{veiculo.marca}", "{veiculo.modelo}", "{veiculo.placa}", "{veiculo.capacidade}"'
+        fields = 'tipo, marca, modelo, placa, capacidade, largura, comprimento, altura'
+        values = f'"{veiculo.tipo}", "{veiculo.marca}", "{veiculo.modelo}", "{veiculo.placa}", "{veiculo.capacidade}", "{veiculo.largura}", "{veiculo.comprimento}","{veiculo.altura}"'
         try:
             self.__database.cursor.execute(
                 f'INSERT INTO {self.__table_name} ({fields}) VALUES({values})')
@@ -35,7 +35,7 @@ class DaoVeiculo(AbstractDao):
             return False
 
     def update(self, veiculo: Veiculo):
-        fields = f'tipo = "{veiculo.tipo}", marca = "{veiculo.marca}", modelo = "{veiculo.modelo}", placa = "{veiculo.placa}", capacidade = "{veiculo.capacidade}"'
+        fields = f'tipo = "{veiculo.tipo}", marca = "{veiculo.marca}", modelo = "{veiculo.modelo}", placa = "{veiculo.placa}", capacidade = "{veiculo.capacidade}", largura = "{veiculo.largura}", comprimento = "{veiculo.comprimento}", altura = "{veiculo.altura}"'
 
         try:
             self.__database.cursor.execute(
@@ -74,7 +74,7 @@ class DaoVeiculo(AbstractDao):
 
         for record in records:
             object = Veiculo(record[1], record[2],
-                             record[3], record[4], record[5])
+                             record[3], record[4], record[5], record[6], record[7], record[8])
             object.id = record[0]
             self.__records.append(object)
 

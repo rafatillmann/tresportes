@@ -45,3 +45,6 @@ class Usuario:
     @senha.setter
     def senha(self, senha: str):
         self.__senha = senha
+
+    def __str__(self):
+        return self.__nome
