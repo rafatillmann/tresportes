@@ -1,5 +1,6 @@
 from view.viewLogin import ViewLogin
 from controller.controllerUsuario import ControllerUsuario
+from util.session import Session
 
 class Login():
     def __init__(self):
@@ -11,14 +12,9 @@ class Login():
             email, password = self.__view.login()
             if email and password:
                 login = self.__controller_usuario.login(email, password)
-                
+
                 if login:
-                    if login == 'Destinatario':
-                        print()
-                    if login == 'Gerente':
-                        print()
-                    if login == 'Motorista':
-                        print()
+                    pass
                 else:
                     pass
         except Exception:

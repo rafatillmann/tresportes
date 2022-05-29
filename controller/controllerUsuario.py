@@ -1,4 +1,4 @@
-import util.session 
+from util.session import Session
 
 class ControllerUsuario():
 
@@ -23,6 +23,7 @@ class ControllerUsuario():
                     
                 if(user):
                     if(user.password == password):
+                        Session.type = type
                         return True
                 return False
         except Exception:

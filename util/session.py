@@ -2,12 +2,12 @@
 class Session():
 
     @property
-    def tipo(self):
-        return self.__tipo
+    def type(self):
+        return self.__type
 
-    @tipo.setter
-    def tipo(self, tipo: int):
-        self.__tipo = tipo
+    @type.setter
+    def type(self, type: int):
+        self.__type = type
 
 
 Session = Session()
