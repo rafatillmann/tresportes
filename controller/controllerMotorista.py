@@ -11,13 +11,23 @@ class ControllerMotorista:
         self.__view = ViewMotorista()
 
     def options(self):
-        option = self.__view.options()
+        list = self.__dao_motorista.list()
+        option = self.__view.options(list)
+
+        if option == 'insert':
+            self.insert()
 
     def insert(self):
-        pass
+        try:
+            value = self.__view.insert()
+        except Exception:
+            pass
 
     def update(self):
-        pass
+        try:
+            value = self.__view.update()
+        except Exception:
+            pass
 
     def delete(self):
         pass
