@@ -3,12 +3,16 @@ from array import array
 import PySimpleGUI as sg
 
 from model.motorista import Motorista
+from view.view import View
 
 sg.theme('System Default 1')
 sg.set_options(element_padding=(0, 0))
 
 
-class ViewMotorista():
+class ViewMotorista(View):
+
+    def __init__(self):
+        super().__init__()
 
     def options(self, list: array):
 
@@ -19,7 +23,7 @@ class ViewMotorista():
 
         layout = [[sg.Button('Cadastrar motoristas', key='insert'), sg.Button('Pesquisar'), sg.Button('Motoristas excluídos')],
                   [sg.Listbox(list, expand_x=True,
-                              expand_y=True, key='select')],
+                              expand_y=True, size=(100, 30), font=('Arial', 12), pad=(20, 20),  key='select')],
                   [sg.Button('Editar', key='edit')]
                   ]
 
