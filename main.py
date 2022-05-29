@@ -1,4 +1,4 @@
-from controller.controllerMotorista import ControllerMotorista
+from controller.controllerInitial import Initial
 
 if __name__ == "__main__":
-    ControllerMotorista().options()
+    Initial().start()
