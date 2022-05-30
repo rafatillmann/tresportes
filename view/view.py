@@ -20,3 +20,4 @@ class View(ABC):
                  "PROGRESS_DEPTH": 0}
         sg.theme_add_new("Tresportes", theme)
         sg.theme("Tresportes")
+        sg.set_options(element_padding=(8, 8))
