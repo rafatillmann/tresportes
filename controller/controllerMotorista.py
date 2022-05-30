@@ -23,14 +23,14 @@ class ControllerMotorista:
             if len(values['select']) > 0:
                 motorista = self.read(values['select'][0].id)
                 self.update(motorista)
+        elif button == 'search':
+            self.search()
 
     def insert(self):
         try:
             button, values = self.__view.display()
 
             if button == 'cancel':
-                pass
-            elif button == 'delete':
                 pass
             elif button == 'save':
                 veiculo = Veiculo(values['tipo'], values['marca'], values['modelo'],
@@ -51,21 +51,32 @@ class ControllerMotorista:
             if button == 'cancel':
                 pass
             elif button == 'delete':
-                pass
+                self.delete(motorista)
             elif button == 'save':
-                veiculo = Veiculo(values['tipo'], values['marca'], values['modelo'],
-                                  values['placa'], int(values['capacidade']), int(values['largura']), int(values['comprimento']), int(values['altura']))
-                print(veiculo)
-                motorista = Motorista(values['nome'], values['email'],
-                                      int(values['cpf']), randint(300, 600), int(values['carga_horaria']), veiculo)
+                veiculo = motorista.veiculo
+                veiculo.tipo = values['tipo']
+                veiculo.timarcapo = values['marca']
+                veiculo.modelo = values['modelo']
+                veiculo.placa = values['placa']
+                veiculo.capacidade = int(values['capacidade'])
+                veiculo.largura = int(values['largura'])
+                veiculo.comprimento = int(values['comprimento'])
+                veiculo.altura = int(values['altura'])
+
+                motorista.nome = values['nome']
+                motorista.email = values['email']
+                motorista.cpf = int(values['cpf'])
+                motorista.carga_horaria = int(values['carga_horaria'])
+                motorista.veiculo = veiculo
 
                 self.__dao_veiculo.update(veiculo)
                 self.__dao_motorista.update(motorista)
         except Exception:
             pass
 
-    def delete(self):
-        pass
+    def delete(self, motorista: Motorista):
+        self.__dao_veiculo.delete(motorista.veiculo)
+        self.__dao_motorista.delete(motorista)
 
     def read(self, id: int):
         return self.__dao_motorista.read(id)
