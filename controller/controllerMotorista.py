@@ -35,9 +35,8 @@ class ControllerMotorista:
             elif button == 'save':
                 veiculo = Veiculo(values['tipo'], values['marca'], values['modelo'],
                                   values['placa'], int(values['capacidade']), int(values['largura']), int(values['comprimento']), int(values['altura']))
-                print(veiculo)
                 motorista = Motorista(values['nome'], values['email'],
-                                      int(values['cpf']), randint(300, 600), int(values['carga_horaria']), veiculo)
+                                      values['cpf'], randint(300, 600), int(values['carga_horaria']), veiculo)
 
                 self.__dao_veiculo.insert(veiculo)
                 self.__dao_motorista.insert(motorista)
@@ -65,7 +64,7 @@ class ControllerMotorista:
 
                 motorista.nome = values['nome']
                 motorista.email = values['email']
-                motorista.cpf = int(values['cpf'])
+                motorista.cpf = values['cpf']
                 motorista.carga_horaria = int(values['carga_horaria'])
                 motorista.veiculo = veiculo
 
