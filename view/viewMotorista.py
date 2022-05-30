@@ -14,7 +14,8 @@ class ViewMotorista(View):
 
     def options(self, list: array):
 
-        layout = [[sg.Button('Cadastrar motoristas', key='insert'), sg.Button('Pesquisar'), sg.Button('Motoristas excluídos')],
+        layout = [[sg.Button('Cadastrar motoristas', key='insert'), sg.Button('Pesquisar', key='search'), sg.Button('Motoristas excluídos')],
+                  [sg.Input(size=(20, 1), key='input')],
                   [sg.Listbox(list, expand_x=True,
                               expand_y=True, size=(50, 20), font=('Arial', 12),  pad=(20, 20), key='select')],
                   [sg.Button('Editar', key='edit')]
@@ -23,7 +24,19 @@ class ViewMotorista(View):
         window = sg.Window('Motoristas', layout,
                            default_element_size=(12, 1), margins=(10, 10), element_justification=CENTER)
 
-        button, values = window.read()
+        while True:
+            button, values = window.read()
+
+            if button == 'search':
+                new_values = []
+                search = values['input']
+                for object in list:
+                    if search in object.nome.lower():
+                        new_values.append(object)
+                window['select'].update(new_values)
+            else:
+                break
+
         window.close()
 
         return button, values
@@ -90,16 +103,14 @@ class ViewMotorista(View):
                           [sg.Text('Atura Máx.', size=(15, 1)),
                           sg.InputText(key='altura')]
                           ]
-        layout = [layoutForm, [sg.Button('Excluir', key='delete'), sg.Button(
+        layout = [layoutForm, [sg.Button('Excluir', key='delete', disabled=True if not motorista else False), sg.Button(
             'Cancelar', key='cancel'), sg.Button('Cadastrar', key='save')]]
 
         window = sg.Window('Motoristas', layout,
                            default_element_size=(30, 1), margins=(50, 10), element_justification=CENTER)
 
         button, values = window.read()
+
         window.close()
 
         return button, values
-
-    def update(self):
-        pass
