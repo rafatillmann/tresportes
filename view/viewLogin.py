@@ -1,9 +1,14 @@
 import PySimpleGUI as sg
 
-class ViewLogin():
+from view.view import View
+
+
+class ViewLogin(View):
+
+    def __init__(self):
+        super().__init__()
 
     def login(self):
-        sg.ChangeLookAndFeel('System Default 1')
         layout = [
             [sg.Text('Login', font=(25))],
             [sg.Text('Email', size=(15, 1)),
