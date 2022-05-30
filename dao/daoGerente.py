@@ -80,7 +80,7 @@ class DaoGerente(AbstractDao):
         for record in records:
 
             object = Gerente(record[1], record[2],
-                               record[3], record[4], record[5])
+                               record[3], record[4])
             object.id = record[0]
             self.__records.append(object)
 
