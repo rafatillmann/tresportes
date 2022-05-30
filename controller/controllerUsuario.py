@@ -1,5 +1,5 @@
 from util.session import Session
-from dao.daoDestinatario import DaoDestinario
+from dao.daoDestinatario import DaoDestinatario
 from dao.daoGerente import DaoGerente
 from dao.daoMotorista import DaoMotorista
 
@@ -7,7 +7,7 @@ from dao.daoMotorista import DaoMotorista
 class ControllerUsuario():
 
     def __init__(self):
-        self.__daoDestinatario = None
+        self.__daoDestinatario = DaoDestinatario
         self.__daoGerente = DaoGerente
         self.__daoMotorista = DaoMotorista
 
