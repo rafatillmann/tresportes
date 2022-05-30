@@ -13,7 +13,7 @@ class DaoMotorista(AbstractDao):
         self.__dao_veiculo = DaoVeiculo
 
         try:
-            fields = 'id integer NOT NULL, nome varchar(255) NOT NULL, email varchar(255) NOT NULL, cpf integer NOT NULL, senha varchar(255) NOT NULL, carga_horaria integer NOT NULL, veiculo integer NOT NULL, PRIMARY KEY(id AUTOINCREMENT), FOREIGN KEY(veiculo) REFERENCES veiculo(id)'
+            fields = 'id integer NOT NULL, nome varchar(255) NOT NULL, email varchar(255) NOT NULL, cpf integer NOT NULL, senha varchar(255) NOT NULL, carga_horaria integer NOT NULL, veiculo integer NOT NULL, deleted int DEFAULT 0, PRIMARY KEY(id AUTOINCREMENT), FOREIGN KEY(veiculo) REFERENCES veiculo(id)'
             self.__database.cursor.execute(
                 f'CREATE TABLE IF NOT EXISTS {self.__table_name} ({fields})')
             self.__database.connection.commit()
@@ -51,7 +51,7 @@ class DaoMotorista(AbstractDao):
     def delete(self, motorista: Motorista):
         try:
             self.__database.cursor.execute(
-                f'DELETE FROM {self.__table_name} WHERE id = {motorista.id}')
+                f'UPDATE {self.__table_name} SET deleted=1 WHERE id = {motorista.id}')
             self.__database.connection.commit()
 
             for record in self.__records:
@@ -77,7 +77,7 @@ class DaoMotorista(AbstractDao):
 
     def populate(self):
         records = self.__database.cursor.execute(
-            f'SELECT * FROM {self.__table_name}').fetchall()
+            f'SELECT * FROM {self.__table_name} WHERE deleted=0').fetchall()
 
         for record in records:
 
