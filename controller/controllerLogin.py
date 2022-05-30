@@ -9,10 +9,9 @@ class Login():
 
     def start(self):
         try:
-            email, password = self.__view.login()
-            if email and password:
-                login = self.__controller_usuario.login(email, password)
-
+            email, senha = self.__view.login()
+            if email and senha:
+                login = self.__controller_usuario.login(email, senha)
                 if login:
                     pass
                 else:

@@ -8,9 +8,9 @@ class ControllerUsuario():
         self.__daoMotorista = None
         self.__view = None  
 
-    def login(self, email: str, password: str):
+    def login(self, email: str, senha: str):
         try:
-            if isinstance(email, str) and isinstance(password, str):
+            if isinstance(email, str) and isinstance(senha, str):
                 user = self.__daoDestinatario.readByEmail(email)
                 type = "Destinatario"
 
@@ -22,7 +22,7 @@ class ControllerUsuario():
                     type = "Motorista"
                     
                 if(user):
-                    if(user.password == password):
+                    if(user.senha == senha):
                         Session.type = type
                         return True
                 return False

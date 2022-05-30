@@ -14,7 +14,7 @@ class ViewLogin(View):
             [sg.Text('Email', size=(15, 1)),
              sg.InputText(key='email')],
             [sg.Text('Senha', size=(15, 1)),
-             sg.InputText(key='password')],
+             sg.InputText(key='senha')],
             [sg.Submit('OK'), sg.Cancel('Cancelar', key='cancel')]
         ]
 
@@ -24,6 +24,6 @@ class ViewLogin(View):
         window.close()
 
         if button == 'OK':
-            return values['email'], values['password']
+            return values['email'], values['senha']
         else:
             return False
