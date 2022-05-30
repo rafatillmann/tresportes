@@ -1,12 +1,10 @@
 
 from array import array
+from tkinter import CENTER
 import PySimpleGUI as sg
 
 from model.motorista import Motorista
 from view.view import View
-
-sg.theme('System Default 1')
-sg.set_options(element_padding=(0, 0))
 
 
 class ViewMotorista(View):
@@ -23,12 +21,12 @@ class ViewMotorista(View):
 
         layout = [[sg.Button('Cadastrar motoristas', key='insert'), sg.Button('Pesquisar'), sg.Button('Motoristas excluídos')],
                   [sg.Listbox(list, expand_x=True,
-                              expand_y=True, size=(100, 30), font=('Arial', 12), pad=(20, 20),  key='select')],
+                              expand_y=True, size=(50, 20), font=('Arial', 12),  pad=(20, 20), key='select')],
                   [sg.Button('Editar', key='edit')]
                   ]
 
         window = sg.Window('Motoristas', layout,
-                           default_element_size=(12, 1))
+                           default_element_size=(12, 1), margins=(10, 10), element_justification=CENTER)
 
         button, values = window.read()
         window.close()
@@ -101,7 +99,7 @@ class ViewMotorista(View):
             'Cancelar', key='cancel'), sg.Button('Cadastrar', key='save')]]
 
         window = sg.Window('Motoristas', layout,
-                           default_element_size=(30, 1))
+                           default_element_size=(30, 1), margins=(10, 10), size=(500, 500), element_justification=CENTER)
 
         button, values = window.read()
         window.close()
