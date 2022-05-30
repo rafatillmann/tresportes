@@ -14,7 +14,7 @@ class ViewMotorista(View):
 
     def options(self, list: array):
 
-        layout = [[sg.Button('Cadastrar motoristas', key='insert'), sg.Button('Pesquisar', key='search'), sg.Button('Motoristas excluídos')],
+        layout = [[sg.Button('Cadastrar motoristas', key='insert'), sg.Button('Pesquisar', key='search'), sg.Button('Motoristas excluídos', key='del_driver')],
                   [sg.Input(size=(20, 1), key='input')],
                   [sg.Listbox(list, expand_x=True,
                               expand_y=True, size=(50, 20), font=('Arial', 12),  pad=(20, 20), key='select')],
@@ -110,6 +110,34 @@ class ViewMotorista(View):
                            default_element_size=(30, 1), margins=(50, 10), element_justification=CENTER)
 
         button, values = window.read()
+
+        window.close()
+
+        return button, values
+
+    def del_driver(self, list: array):
+        layout = [[sg.Button('Cadastrar motoristas', key='insert'), sg.Button('Pesquisar', key='search'), sg.Button('Motoristas excluídos', key='del_driver')],
+                  [sg.Input(size=(20, 1), key='input')],
+                  [sg.Listbox(list, expand_x=True,
+                              expand_y=True, size=(50, 20), font=('Arial', 12),  pad=(20, 20), key='select')],
+                  [sg.Button('Voltar', key='back')]
+                  ]
+
+        window = sg.Window('Motoristas', layout,
+                           default_element_size=(12, 1), margins=(10, 10), element_justification=CENTER)
+
+        while True:
+            button, values = window.read()
+
+            if button == 'search':
+                new_values = []
+                search = values['input']
+                for object in list:
+                    if search in object.nome.lower():
+                        new_values.append(object)
+                window['select'].update(new_values)
+            else:
+                break
 
         window.close()
 

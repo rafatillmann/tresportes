@@ -23,8 +23,8 @@ class ControllerMotorista:
             if len(values['select']) > 0:
                 motorista = self.read(values['select'][0].id)
                 self.update(motorista)
-        elif button == 'search':
-            self.search()
+        elif button == 'del_driver':
+            self.del_driver()
 
     def insert(self):
         try:
@@ -79,3 +79,18 @@ class ControllerMotorista:
 
     def read(self, id: int):
         return self.__dao_motorista.read(id)
+
+    def del_driver(self):
+        try:
+            list = self.__dao_motorista.deleted()
+            button, values = self.__view.del_driver(list)
+
+            if button == 'insert':
+                self.insert()
+            elif button == 'back':
+                self.options()
+            elif button == 'del_driver':
+                self.del_driver()
+
+        except Exception:
+            pass
