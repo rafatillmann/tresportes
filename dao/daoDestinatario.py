@@ -80,7 +80,7 @@ class DaoDestinatario(AbstractDao):
         for record in records:
 
             object = Destinatario(record[1], record[2],
-                               record[3], record[4], record[5])
+                               record[3], record[4], record[5], record[6], record[7], record[8])
             object.id = record[0]
             self.__records.append(object)
 

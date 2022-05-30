@@ -15,15 +15,14 @@ class ViewLogin(View):
              sg.InputText(key='email')],
             [sg.Text('Senha', size=(15, 1)),
              sg.InputText(key='senha')],
-            [sg.Submit('OK'), sg.Cancel('Cancelar', key='cancel')]
+            [sg.Submit('OK'), sg.Cancel('Cancelar', key='cancel')],
+            [sg.Button('Cadastrar', key='insert')]
         ]
 
         window = sg.Window('Login').Layout(layout)
-        button, values = window.Read()
+        button, values = window.read()
 
         window.close()
 
-        if button == 'OK':
-            return values['email'], values['senha']
-        else:
-            return False
+        return button, values
+    
