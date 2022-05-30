@@ -15,7 +15,7 @@ class ViewLogin(View):
              sg.InputText(key='email')],
             [sg.Text('Senha', size=(15, 1)),
              sg.InputText(key='senha')],
-            [sg.Submit('OK'), sg.Cancel('Cancelar', key='cancel')],
+            [sg.Submit('OK', key='save'), sg.Cancel('Cancelar', key='cancel')],
             [sg.Button('Cadastrar', key='insert')]
         ]
 
@@ -25,4 +25,3 @@ class ViewLogin(View):
         window.close()
 
         return button, values
-    

@@ -14,8 +14,10 @@ class Login():
     def start(self):
         try:
             button, values = self.__view.login()
-            if button == 'OK':
-                if values['email'] and values['senha']:
+            if button == 'save':
+                email = values['email']
+                senha = values['senha']
+                if email and senha:
                     login = self.__controller_usuario.login(email, senha)
                     if login:
                         self.app(email)
@@ -23,8 +25,7 @@ class Login():
                         pass
             elif button == 'insert':
                 self.__controller_destinatario.insert()
-                
-                
+
         except Exception:
             pass
 
@@ -36,6 +37,6 @@ class Login():
                 ControllerMotorista().options()
         elif Session.type == 'Destinatario':
             while True:
-                ControllerDestinatario().insert(email)
+                ControllerDestinatario().update(email)
         else:
             pass

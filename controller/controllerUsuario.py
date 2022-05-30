@@ -16,6 +16,8 @@ class ControllerUsuario():
             user = self.__daoDestinatario.readByEmail(email)
             type = "Destinatario"
 
+            print(type)
+
             if(not user):
                 user = self.__daoGerente.readByEmail(email)
                 type = "Gerente"
@@ -27,7 +29,7 @@ class ControllerUsuario():
                 if(user.senha == senha):
                     Session.type = type
                     return True
-            print(type)
+
             return False
         except Exception:
             pass
