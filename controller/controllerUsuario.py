@@ -1,4 +1,6 @@
 from util.session import Session
+from dao.daoDestinatario import DaoDestinario
+from dao.daoGerente import DaoGerente
 from dao.daoMotorista import DaoMotorista
 
 
@@ -6,9 +8,8 @@ class ControllerUsuario():
 
     def __init__(self):
         self.__daoDestinatario = None
-        self.__daoGerente = None
+        self.__daoGerente = DaoGerente
         self.__daoMotorista = DaoMotorista
-        self.__view = None
 
     def login(self, email: str, senha: str):
         try:
