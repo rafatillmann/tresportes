@@ -13,7 +13,8 @@ class Login():
             if email and senha:
                 login = self.__controller_usuario.login(email, senha)
                 if login:
-                    pass
+                    type = Session.type
+                    print(type)
                 else:
                     pass
         except Exception:

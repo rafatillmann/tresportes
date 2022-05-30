@@ -1,11 +1,12 @@
 from util.session import Session
+from dao.daoMotorista import DaoMotorista
 
 class ControllerUsuario():
 
     def __init__(self):
         self.__daoDestinatario = None
         self.__daoGerente = None
-        self.__daoMotorista = None
+        self.__daoMotorista = DaoMotorista()
         self.__view = None  
 
     def login(self, email: str, senha: str):
