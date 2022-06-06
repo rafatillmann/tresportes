@@ -21,3 +21,6 @@ class View(ABC):
         sg.theme_add_new("Tresportes", theme)
         sg.theme("Tresportes")
         sg.set_options(element_padding=(8, 8))
+
+    def popUp(self, msg: str = 'Um problema inesperado ocorreu, tente novamente!'):
+        sg.popup(msg, title='Trêsportes')

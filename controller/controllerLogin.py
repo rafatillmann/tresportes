@@ -27,14 +27,13 @@ class Login():
                 self.__controller_destinatario.insert()
 
         except Exception:
-            pass
+            self.__view.popUp()
 
     def app(self, email: str = None):
         if Session.type == 'Motorista':
             pass
         elif Session.type == 'Gerente':
-            while True:
-                ControllerMotorista().options()
+            ControllerMotorista().options()
         elif Session.type == 'Destinatario':
             while True:
                 ControllerDestinatario().update(email)

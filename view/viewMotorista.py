@@ -95,7 +95,7 @@ class ViewMotorista(View):
                           [sg.Text('Placa', size=(15, 1)), sg.InputText(
                               key='placa')],
                           [sg.Text('Capacidade', size=(15, 1)),
-                          sg.InputText(key='capacidade')],
+                          sg.Input(key='capacidade')],
                           [sg.Text('Larg. Máx.', size=(15, 1)),
                           sg.InputText(key='largura')],
                           [sg.Text('Comp. Máx.', size=(15, 1)),
@@ -109,7 +109,22 @@ class ViewMotorista(View):
         window = sg.Window('Motoristas', layout,
                            default_element_size=(30, 1), margins=(50, 10), element_justification=CENTER)
 
-        button, values = window.read()
+        while True:
+            button, values = window.read()
+
+            if button == 'save':
+                required = False
+
+                for value in values:
+                    if values[value] == '' or values[value] == None:
+                        required = True
+                if required:
+                    self.popUp(
+                        'Obrigatório o preenchimento de todos os campos')
+                else:
+                    break
+            else:
+                break
 
         window.close()
 

@@ -24,23 +24,26 @@ class ControllerDestinatario:
                 self.__dao_destinatario.insert(destinatario)
 
         except Exception:
-            pass
+            self.__view.popUp()
 
     def update(self, email: str = None):
-        destinatario = self.__dao_destinatario.readByEmail(email)
-        button, values = self.__view.display(destinatario)
+        try:
+            destinatario = self.__dao_destinatario.readByEmail(email)
+            button, values = self.__view.display(destinatario)
 
-        if button == 'save':
-            destinatario.nome = values['nome']
-            destinatario.email = values['email']
-            destinatario.cpf = values['cpf']
-            destinatario.senha = values['senha']
-            destinatario.cnpj = values['cpf']
-            destinatario.endereco = values['endereco']
-            destinatario.complemento = values['complemento']
-            destinatario.telefone = values['telefone']
+            if button == 'save':
+                destinatario.nome = values['nome']
+                destinatario.email = values['email']
+                destinatario.cpf = values['cpf']
+                destinatario.senha = values['senha']
+                destinatario.cnpj = values['cpf']
+                destinatario.endereco = values['endereco']
+                destinatario.complemento = values['complemento']
+                destinatario.telefone = values['telefone']
 
-            self.__dao_destinatario.update(destinatario)
+                self.__dao_destinatario.update(destinatario)
+        except Exception:
+            self.__view.popUp()
 
     def delete(self):
         pass
