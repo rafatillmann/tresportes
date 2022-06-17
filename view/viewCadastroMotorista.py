@@ -48,7 +48,7 @@ class ViewCadastroMotorista(View):
                           [self.text('Nome'), sg.Input(motorista.nome,
                                                        key='nome', size=(30, 1))],
                           [self.text('CPF'), sg.Input(motorista.cpf,
-                                                      key='cpf', size=(30, 1))],
+                                                      key='cpf', size=(30, 1), tooltip='Para o CPF informe apenas números')],
                           [self.text('E-mail'),
                           sg.Input(motorista.email, key='email', size=(30, 1))],
                           [self.text('Carga horária'),
@@ -79,7 +79,7 @@ class ViewCadastroMotorista(View):
                           [self.text('Nome'), sg.Input(
                               key='nome', size=(30, 1))],
                           [self.text('CPF'), sg.Input(
-                              key='cpf', size=(30, 1))],
+                              key='cpf', size=(30, 1), tooltip='Para o CPF informe apenas números')],
                           [self.text('E-mail'),
                           sg.In(key='email', size=(30, 1))],
                           [self.text('Carga horária'),
