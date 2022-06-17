@@ -1,111 +1,139 @@
-from random import randint
-from tkinter import N
-from view.viewMotorista import ViewMotorista
+from util.utils import cpf_validate, email_validate, generate_random_password
+from view.viewCadastroMotorista import ViewCadastroMotorista
 from dao.daoMotorista import DaoMotorista
 from dao.daoVeiculo import DaoVeiculo
 from model.motorista import Motorista
 from model.veiculo import Veiculo
 
 
-class ControllerMotorista:
+class ControllerMotorista():
 
-    def __init__(self):
+    def __init__(self, session):
         self.__dao_motorista = DaoMotorista
         self.__dao_veiculo = DaoVeiculo
-        self.__view = ViewMotorista()
+        self.__view = ViewCadastroMotorista()
+        self.__session = session
 
     def options(self):
         while True:
             list = self.__dao_motorista.list()
             button, values = self.__view.options(list)
-
-            if button == None:
-                exit()
-            elif button == 'insert':
-                self.insert()
-            elif button == 'edit':
-                if len(values['select']) > 0:
-                    motorista = self.read(values['select'][0].id)
-                    self.update(motorista)
-            elif button == 'del_driver':
-                self.del_driver()
+            if not self.__session.menu(button):
+                if button == 'insert':
+                    self.insert()
+                elif button == 'edit':
+                    if len(values['select']) > 0:
+                        motorista = self.read(values['select'][0].id)
+                        self.update(motorista)
+                elif button == 'del_driver':
+                    self.del_driver()
 
     def insert(self):
         while True:
             try:
                 button, values = self.__view.display()
 
-                if button == None:
-                    exit()
-                elif button == 'cancel':
-                    break
-                elif button == 'save':
-                    veiculo = Veiculo(values['tipo'], values['marca'], values['modelo'],
-                                      values['placa'], int(values['capacidade']), int(values['largura']), int(values['comprimento']), int(values['altura']))
-                    motorista = Motorista(values['nome'], values['email'],
-                                          int(values['cpf']), randint(300, 600), int(values['carga_horaria']), veiculo)
-
-                    if self.__dao_veiculo.insert(veiculo) and self.__dao_motorista.insert(motorista):
-                        # self.__view.popUp(
-                        #     f'Login tempotário do motorista. E-mail: {motorista.email} Senha: {motorista.senha}')
+                if not self.__session.menu(button):
+                    if button == 'cancel':
                         break
-                    else:
-                        self.__view.popUp()
+                    elif button == 'save':
+                        if cpf_validate(values['cpf']):
+                            if email_validate(values['email']):
+                                if self.read_by_email(values['email']):
+                                    self.__view.popUp(
+                                        'Operação inválida, motorista já cadastrado')
+                                else:
+                                    veiculo = Veiculo(values['tipo'], values['marca'], values['modelo'],
+                                                      values['placa'], int(values['capacidade']), int(values['largura']), int(values['comprimento']), int(values['altura']))
+                                    motorista = Motorista(values['nome'], values['email'],
+                                                          int(values['cpf']), generate_random_password(), int(values['carga_horaria']), veiculo)
+
+                                    if self.__dao_veiculo.insert(veiculo) and self.__dao_motorista.insert(motorista):
+                                        self.__view.popUp(
+                                            f'Login tempotário do motorista, repasse essas informações.\nE-mail: {motorista.email}\nSenha: {motorista.senha}')
+                                        break
+                                    else:
+                                        self.__view.popUp()
+                            else:
+                                self.__view.popUp(
+                                    'Não foi possível finalizar o cadastro, e-mail inválido')
+                        else:
+                            self.__view.popUp(
+                                'Não foi possível finalizar o cadastro, CPF inválido')
             except Exception:
                 self.__view.popUp()
 
     def update(self, motorista: Motorista):
-        try:
-            button, values = self.__view.display(motorista)
+        while True:
+            try:
+                button, values = self.__view.display(motorista)
 
-            if button == None:
-                exit()
-            elif button == 'cancel':
-                pass
-            elif button == 'delete':
-                self.delete(motorista)
-            elif button == 'save':
-                veiculo = motorista.veiculo
-                veiculo.tipo = values['tipo']
-                veiculo.timarcapo = values['marca']
-                veiculo.modelo = values['modelo']
-                veiculo.placa = values['placa']
-                veiculo.capacidade = int(values['capacidade'])
-                veiculo.largura = int(values['largura'])
-                veiculo.comprimento = int(values['comprimento'])
-                veiculo.altura = int(values['altura'])
+                if not self.__session.menu(button):
+                    if button == 'cancel':
+                        break
+                    elif button == 'delete':
+                        if self.delete(motorista):
+                            break
+                        else:
+                            self.__view.popUp()
+                    elif button == 'save':
+                        if cpf_validate(values['cpf']):
+                            if email_validate(values['email']):
+                                veiculo = motorista.veiculo
+                                veiculo.tipo = values['tipo']
+                                veiculo.timarcapo = values['marca']
+                                veiculo.modelo = values['modelo']
+                                veiculo.placa = values['placa']
+                                veiculo.capacidade = int(values['capacidade'])
+                                veiculo.largura = int(values['largura'])
+                                veiculo.comprimento = int(
+                                    values['comprimento'])
+                                veiculo.altura = int(values['altura'])
 
-                motorista.nome = values['nome']
-                motorista.email = values['email']
-                motorista.cpf = values['cpf']
-                motorista.carga_horaria = int(values['carga_horaria'])
-                motorista.veiculo = veiculo
+                                motorista.nome = values['nome']
+                                motorista.email = values['email']
+                                motorista.cpf = values['cpf']
+                                motorista.carga_horaria = int(
+                                    values['carga_horaria'])
+                                motorista.veiculo = veiculo
 
-                self.__dao_veiculo.update(veiculo)
-                self.__dao_motorista.update(motorista)
-        except Exception:
-            self.__view.popUp()
+                                if self.__dao_veiculo.update(veiculo) and self.__dao_motorista.update(motorista):
+                                    break
+                                else:
+                                    self.__view.popUp()
+                            else:
+                                self.__view.popUp(
+                                    'Não foi possível finalizar o cadastro, e-mail inválido')
+                        else:
+                            self.__view.popUp(
+                                'Não foi possível finalizar o cadastro, CPF inválido')
+            except Exception:
+                self.__view.popUp()
 
     def delete(self, motorista: Motorista):
-        self.__dao_veiculo.delete(motorista.veiculo)
-        self.__dao_motorista.delete(motorista)
+        if self.__dao_veiculo.delete(motorista.veiculo) and self.__dao_motorista.delete(motorista):
+            return True
+        else:
+            return False
 
     def read(self, id: int):
         return self.__dao_motorista.read(id)
+
+    def read_by_email(self, email):
+        return self.__dao_motorista.readByEmail(email)
 
     def del_driver(self):
         try:
             list = self.__dao_motorista.deleted()
             button, values = self.__view.del_driver(list)
 
-            if button == None:
-                exit()
-            elif button == 'insert':
-                self.insert()
-            elif button == 'back':
-                self.options()
-            elif button == 'del_driver':
-                self.del_driver()
+            if not self.__session.menu(button):
+                if button == 'insert':
+                    self.insert()
+                elif button == 'back':
+                    self.options()
+                elif button == 'del_driver':
+                    self.del_driver()
 
         except Exception:
             self.__view.popUp()

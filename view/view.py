@@ -5,6 +5,7 @@ from tkinter import CENTER, RIGHT, TOP
 
 class View(ABC):
 
+    @abstractmethod
     def __init__(self):
         self.theme()
 

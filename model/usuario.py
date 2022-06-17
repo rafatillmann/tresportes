@@ -1,7 +1,9 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 
 
 class Usuario(ABC):
+
+    @abstractmethod
     def __init__(self, nome: str, email: str, cpf: int, senha: str):
         self.__id = None
         self.__nome = nome

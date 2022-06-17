@@ -7,7 +7,7 @@ from model.motorista import Motorista
 from view.view import View
 
 
-class ViewMotorista(View):
+class ViewCadastroMotorista(View):
 
     def __init__(self):
         super().__init__()

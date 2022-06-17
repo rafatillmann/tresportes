@@ -1,4 +1,4 @@
-from controller.controllerMotorista import ControllerMotorista
+from controller.controllerSession import ControllerSession
 from view.viewLogin import ViewLogin
 from controller.controllerUsuario import ControllerUsuario
 from controller.controllerDestinatario import ControllerDestinatario
@@ -9,6 +9,7 @@ class Login():
     def __init__(self):
         self.__controller_usuario = ControllerUsuario()
         self.__controller_destinatario = ControllerDestinatario()
+        self.__controller_session = ControllerSession()
         self.__view = ViewLogin()
 
     def start(self):
@@ -33,7 +34,7 @@ class Login():
         if Session.type == 'Motorista':
             pass
         elif Session.type == 'Gerente':
-            ControllerMotorista().options()
+            self.__controller_session.session_manager()
         elif Session.type == 'Destinatario':
             while True:
                 ControllerDestinatario().update(email)
