@@ -1,6 +1,5 @@
 
 from array import array
-from tkinter import CENTER
 import PySimpleGUI as sg
 
 from model.motorista import Motorista
@@ -14,7 +13,9 @@ class ViewCadastroMotorista(View):
 
     def options(self, list: array):
 
-        layout = [[sg.Button('Cadastrar motoristas', key='insert', font=('Arial', 10, 'bold')), sg.Button('Pesquisar', key='search', font=('Arial', 10, 'bold')), sg.Button('Motoristas excluídos', key='del_driver', font=('Arial', 10, 'bold'))],
+        layout = [[sg.Text('Motoristas', font=('Arial', 20, 'bold'))],
+                  [sg.Button('Cadastrar motoristas', key='insert', font=('Arial', 10, 'bold')), sg.Button('Pesquisar', key='search', font=(
+                      'Arial', 10, 'bold')), sg.Button('Motoristas excluídos', key='del_driver', font=('Arial', 10, 'bold'))],
                   [sg.Input(size=(20, 5), key='input', expand_x=True)],
                   [self.list(list)],
                   [sg.Button('Editar', key='edit', font=(
@@ -131,7 +132,9 @@ class ViewCadastroMotorista(View):
         return button, values
 
     def del_driver(self, list: array):
-        layout = [[sg.Button('Cadastrar motoristas', key='insert', font=('Arial', 10, 'bold')), sg.Button('Pesquisar', key='search', font=('Arial', 10, 'bold')), sg.Button('Motoristas excluídos', key='del_driver', font=('Arial', 10, 'bold'))],
+        layout = [[sg.Text('Motoristas', font=('Arial', 20, 'bold'))],
+                  [sg.Button('Cadastrar motoristas', key='insert', font=('Arial', 10, 'bold')), sg.Button('Pesquisar', key='search', font=(
+                      'Arial', 10, 'bold')), sg.Button('Motoristas excluídos', key='del_driver', font=('Arial', 10, 'bold'))],
                   [sg.Input(size=(20, 5), key='input', expand_x=True)],
                   [self.list(list)],
                   [sg.Button('Voltar', key='back', font=(
