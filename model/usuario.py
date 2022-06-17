@@ -1,4 +1,7 @@
-class Usuario:
+from abc import ABC
+
+
+class Usuario(ABC):
     def __init__(self, nome: str, email: str, cpf: int, senha: str):
         self.__id = None
         self.__nome = nome
@@ -47,4 +50,4 @@ class Usuario:
         self.__senha = senha
 
     def __str__(self):
-        return self.__nome
+        return f'{self.__nome}'
