@@ -45,7 +45,24 @@ class ViewRota(View):
         return button, values
 
     def display(self):
-        pass
+        layout = [[sg.Text('Criar nova rota', font=('Arial', 20, 'bold'))],
+                  [sg.Text('Cargas', font=('Arial', 14, 'bold'))],
+                  [sg.Text('Nenhuma carga adicionada',
+                           font=('Arial', 10, 'bold')), self.button('Adicionar', 'add')],
+                  [self.white_button('Descartar', 'cancel'),
+                   self.button('Concluir', 'save')]
+                  ]
+
+        window = self.window(layout)
+
+        button, values = window.read()
+
+        if button == 'add':
+            loads = self.select_load()
+
+        window.close()
+
+        return button, values
 
     def finish(self):
         pass
@@ -81,3 +98,18 @@ class ViewRota(View):
                            vertical_scroll_only=True, size=(None, 400), key='select')]
 
                 ]
+
+    def select_load(self):
+        layout = [[sg.Text('Selecione as cargas do percurso', font=('Arial', 20, 'bold'))],
+                  [self.multiple_list([1, 2, 3, 4])],
+                  [self.white_button('Voltar', 'back'), self.button(
+                      'Selecionar', 'sel')]
+                  ]
+
+        window = self.window(layout)
+
+        button, values = window.read()
+
+        window.close()
+
+        return values

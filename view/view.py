@@ -37,7 +37,9 @@ class View(ABC):
 
     def menu(self):
         if Session.type == 'Gerente':
-            menu = [[sg.Image(source='./assets/route.png', background_color="#222624", )],
+            menu = [[sg.Text('Gestor', font=('Arial', 11, 'bold'), background_color="#222624", text_color="#FFFFFF")],
+                    [sg.Image(source='./assets/route.png',
+                              background_color="#222624", )],
                     [sg.Button(button_text='Rotas', key='route', size=(
                         15, 2), font=('Arial', 10, 'bold'), pad=0, border_width=0)],
                     [sg.Image(source='./assets/driver.png',
@@ -58,6 +60,18 @@ class View(ABC):
         return sg.Listbox(list, expand_x=True, font=(12),
                           expand_y=True, size=(None, 20), key='select')
 
+    def multiple_list(self, list):
+        return sg.Listbox(list, expand_x=True, font=(12),
+                          expand_y=True, size=(None, 20), key='select', select_mode='multiple')
+
     def button(self, text, key):
         return sg.Button(text, key=key, font=(
             'Arial', 10, 'bold'), size=(10, 1), border_width=0)
+
+    def white_button(self, text, key):
+        return sg.Button(text, key=key, font=(
+            'Arial', 10, 'bold'), size=(10, 1), border_width=0, button_color=("#222624", "#FFFFFF"))
+
+    def gray_button(self, text, key):
+        return sg.Button(text, key=key, font=(
+            'Arial', 10, 'bold'), size=(10, 1), border_width=0, button_color=("#D9D9D9", "#222624"))

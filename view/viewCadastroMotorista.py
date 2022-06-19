@@ -45,15 +45,17 @@ class ViewCadastroMotorista(View):
 
         if motorista:
 
-            layoutForm = [[sg.Text("Informações do motorista", font=('Arial', 16, 'bold'))],
+            layoutForm = [[sg.Text('Cadastro de Motorista', font=('Arial', 20, 'bold'))],
+                          [sg.Text("Informações do motorista",
+                                   font=('Arial', 16, 'bold'))],
                           [self.text('Nome'), sg.Input(motorista.nome,
                                                        key='nome', size=(30, 1))],
                           [self.text('CPF'), sg.Input(motorista.cpf,
                                                       key='cpf', size=(30, 1), tooltip='Para o CPF informe apenas números')],
                           [self.text('E-mail'),
-                          sg.Input(motorista.email, key='email', size=(30, 1))],
+                           sg.Input(motorista.email, key='email', size=(30, 1))],
                           [self.text('Carga horária'),
-                          sg.Input(motorista.carga_horaria, key='carga_horaria', size=(30, 1))],
+                           sg.Input(motorista.carga_horaria, key='carga_horaria', size=(30, 1))],
                           [],
                           [sg.Text("Informações do veículo",
                                    font=('Arial', 14, 'bold'))],
@@ -62,29 +64,31 @@ class ViewCadastroMotorista(View):
                           [self.text('Marca'), sg.Input(motorista.veiculo.marca,
                                                         key='marca', size=(30, 1))],
                           [self.text('Modelo'),
-                          sg.Input(motorista.veiculo.modelo, key='modelo', size=(30, 1))],
+                           sg.Input(motorista.veiculo.modelo, key='modelo', size=(30, 1))],
                           [self.text('Placa'), sg.Input(
                               motorista.veiculo.placa, key='placa', size=(30, 1))],
                           [self.text('Capacidade'),
-                          sg.Input(motorista.veiculo.capacidade, key='capacidade', size=(30, 1))],
+                           sg.Input(motorista.veiculo.capacidade, key='capacidade', size=(30, 1))],
                           [self.text('Larg. Máx.'),
-                          sg.Input(motorista.veiculo.largura, key='largura', size=(30, 1))],
+                           sg.Input(motorista.veiculo.largura, key='largura', size=(30, 1))],
                           [self.text('Comp. Máx.'),
-                          sg.Input(motorista.veiculo.comprimento, key='comprimento', size=(30, 1))],
+                           sg.Input(motorista.veiculo.comprimento, key='comprimento', size=(30, 1))],
                           [self.text('Altura Máx.'),
-                          sg.Input(motorista.veiculo.altura, key='altura', size=(30, 1))]
+                           sg.Input(motorista.veiculo.altura, key='altura', size=(30, 1))]
                           ]
 
         else:
-            layoutForm = [[sg.Text("Informações do motorista", font=('Arial', 16, 'bold'))],
+            layoutForm = [[sg.Text('Cadastro de Motorista', font=('Arial', 20, 'bold'))],
+                          [sg.Text("Informações do motorista",
+                                   font=('Arial', 16, 'bold'))],
                           [self.text('Nome'), sg.Input(
                               key='nome', size=(30, 1))],
                           [self.text('CPF'), sg.Input(
                               key='cpf', size=(30, 1), tooltip='Para o CPF informe apenas números')],
                           [self.text('E-mail'),
-                          sg.In(key='email', size=(30, 1))],
+                           sg.In(key='email', size=(30, 1))],
                           [self.text('Carga horária'),
-                          sg.Input(key='carga_horaria', size=(30, 1))],
+                           sg.Input(key='carga_horaria', size=(30, 1))],
                           [],
                           [sg.Text("Informações do veículo",
                                    font=('Arial', 16, 'bold'))],
@@ -93,17 +97,17 @@ class ViewCadastroMotorista(View):
                           [self.text('Marca'), sg.Input(
                               key='marca', size=(30, 1))],
                           [self.text('Modelo'),
-                          sg.Input(key='modelo', size=(30, 1))],
+                           sg.Input(key='modelo', size=(30, 1))],
                           [self.text('Placa'), sg.Input(
                               key='placa', size=(30, 1))],
                           [self.text('Capacidade'),
-                          sg.Input(key='capacidade', size=(30, 1))],
+                           sg.Input(key='capacidade', size=(30, 1))],
                           [self.text('Larg. Máx.'),
-                          sg.Input(key='largura', size=(30, 1))],
+                           sg.Input(key='largura', size=(30, 1))],
                           [self.text('Comp. Máx.'),
-                          sg.Input(key='comprimento', size=(30, 1))],
+                           sg.Input(key='comprimento', size=(30, 1))],
                           [self.text('Altura Máx.'),
-                          sg.Input(key='altura', size=(30, 1))]
+                           sg.Input(key='altura', size=(30, 1))]
                           ]
         layout = [[sg.Column(layoutForm)], [sg.Button('Excluir', key='delete', font=('Arial', 10, 'bold'), disabled=True if not motorista else False), sg.Button(
             'Cancelar', key='cancel', font=('Arial', 10, 'bold')), sg.Button('Cadastrar', key='save', font=('Arial', 10, 'bold'))]]

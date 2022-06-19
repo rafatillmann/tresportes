@@ -22,7 +22,13 @@ class ControllerRota():
                     self.finish()
 
     def insert(self):
-        pass
+        while True:
+            button, values = self.__view.display()
+            if not self.__session.menu(button):
+                if button == 'cancel':
+                    break
+                elif button == 'save':
+                    pass
 
     def finish(self):
         pass
