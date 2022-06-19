@@ -1,5 +1,5 @@
 from array import array
-from tkinter import CENTER
+from tkinter import BOTTOM, CENTER
 from view.view import View
 import PySimpleGUI as sg
 
@@ -9,28 +9,16 @@ class ViewRota(View):
     def __init__(self):
         super().__init__()
 
-    def options(self, list: array):
+    def options(self, inicial_list: array):
 
-        cards = []
-        for item in list:
-            info = [[sg.Text(item, font=('Arial', 12, 'bold'), background_color='#D9D9D9')],
-                    [sg.Text('Entregas', font=('Arial', 10, 'bold'),
-                             background_color='#D9D9D9')],
-                    [sg.Text('Motorista', font=('Arial', 10, 'bold'),
-                             background_color='#D9D9D9')]]
-            buttons = [[sg.Button('Editar', key='edit', font=(
-                        'Arial', 10, 'bold'), size=(10, 1)), sg.Button('Visualizar', key='edit', font=(
-                            'Arial', 10, 'bold'), size=(10, 1))]]
-            card = [[sg.Column(info), sg.Column(buttons)]]
-            cards.append(
-                [sg.Column(card, background_color='#D9D9D9', justification=CENTER, pad=(0, 5), )])
+        cards = self.cards(inicial_list)
 
         layout = [[sg.Text('Rotas', font=('Arial', 20, 'bold'))],
                   [sg.Button('Criar nova rota', key='insert', font=('Arial', 10, 'bold')), sg.Button('Pesquisar', key='search', font=(
                       'Arial', 10, 'bold')), sg.Button('Visualizar finalizadas', key='finish', font=('Arial', 10, 'bold'))],
                   [sg.Input(size=(20, 5), key='input', expand_x=True)],
                   [sg.Column(cards, scrollable=True,
-                             vertical_scroll_only=True, expand_x=True, size=(None, 400))]
+                             vertical_scroll_only=True, size=(None, 400), key='select')]
 
                   ]
 
@@ -42,13 +30,54 @@ class ViewRota(View):
             if button == 'search':
                 new_values = []
                 search = values['input']
-                for object in list:
-                    if search in object.nome.lower():
+                for object in inicial_list:
+                    if search.lower() in f'Rota {object.id}'.lower():
                         new_values.append(object)
-                window['select'].update(new_values)
+
+                window.close()
+                layout = self.refresh_cards(new_values)
+                window = self.window(layout)
             else:
                 break
 
         window.close()
 
         return button, values
+
+    def display(self):
+        pass
+
+    def finish(self):
+        pass
+
+    def cards(self, list):
+        cards = []
+        for item in list:
+            info = [[sg.Text(f'Rota {item.id}', font=('Arial', 12, 'bold'), background_color='#D9D9D9')],
+                    [sg.Text('Entregas', font=('Arial', 10, 'bold'),
+                             background_color='#D9D9D9')],
+                    [sg.Text('Motorista', font=('Arial', 10, 'bold'),
+                             background_color='#D9D9D9')]]
+            buttons = [[self.button('Editar', f'edit:{item.id}'),
+                        self.button('Visualizar', f'view:{item.id}')]]
+
+            card = [[sg.Column(info, background_color='#D9D9D9', pad=((0, 100), (0, 0))), sg.Column(
+                buttons, vertical_alignment=BOTTOM, background_color='#D9D9D9')]]
+
+            cards.append(
+                [sg.Column(card, background_color='#D9D9D9', justification=CENTER, pad=((0, 5), (0, 10)), )])
+
+        return cards
+
+    def refresh_cards(self, list):
+
+        cards = self.cards(list)
+
+        return [[sg.Text('Rotas', font=('Arial', 20, 'bold'))],
+                [sg.Button('Criar nova rota', key='insert', font=('Arial', 10, 'bold')), sg.Button('Pesquisar', key='search', font=(
+                    'Arial', 10, 'bold')), sg.Button('Visualizar finalizadas', key='finish', font=('Arial', 10, 'bold'))],
+                [sg.Input(size=(20, 5), key='input', expand_x=True)],
+                [sg.Column(cards, scrollable=True,
+                           vertical_scroll_only=True, size=(None, 400), key='select')]
+
+                ]

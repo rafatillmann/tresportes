@@ -2,6 +2,8 @@ from abc import ABC, abstractmethod
 import PySimpleGUI as sg
 from tkinter import CENTER, RIGHT, TOP
 
+from util.session import Session
+
 
 class View(ABC):
 
@@ -34,18 +36,19 @@ class View(ABC):
                          default_element_size=(12, 1), margins=(0, 0), resizable=True)
 
     def menu(self):
-        menu = [[sg.Image(source='./assets/route.png', background_color="#222624", )],
-                [sg.Button(button_text='Rotas', key='route', size=(
-                    15, 2), font=('Arial', 10, 'bold'), pad=0, border_width=0)],
-                [sg.Image(source='./assets/driver.png',
-                          background_color="#222624", )],
-                [sg.Button('Motoristas', key='driver', size=(
-                    15, 2), font=('Arial', 10, 'bold'), pad=0, border_width=0)],
-                [sg.Image(source='./assets/load.png',
-                          background_color="#222624", )],
-                [sg.Button('Cargas', key='load', size=(
-                    15, 2), font=('Arial', 10, 'bold'), pad=0, border_width=0)],
-                ]
+        if Session.type == 'Gerente':
+            menu = [[sg.Image(source='./assets/route.png', background_color="#222624", )],
+                    [sg.Button(button_text='Rotas', key='route', size=(
+                        15, 2), font=('Arial', 10, 'bold'), pad=0, border_width=0)],
+                    [sg.Image(source='./assets/driver.png',
+                              background_color="#222624", )],
+                    [sg.Button('Motoristas', key='driver', size=(
+                        15, 2), font=('Arial', 10, 'bold'), pad=0, border_width=0)],
+                    [sg.Image(source='./assets/load.png',
+                              background_color="#222624", )],
+                    [sg.Button('Cargas', key='load', size=(
+                        15, 2), font=('Arial', 10, 'bold'), pad=0, border_width=0)],
+                    ]
         return menu
 
     def text(self, text):
@@ -54,3 +57,7 @@ class View(ABC):
     def list(self, list):
         return sg.Listbox(list, expand_x=True, font=(12),
                           expand_y=True, size=(None, 20), key='select')
+
+    def button(self, text, key):
+        return sg.Button(text, key=key, font=(
+            'Arial', 10, 'bold'), size=(10, 1), border_width=0)

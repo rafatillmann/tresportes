@@ -31,7 +31,7 @@ class ViewCadastroMotorista(View):
                 new_values = []
                 search = values['input']
                 for object in list:
-                    if search in object.nome.lower():
+                    if search.lower() in object.nome.lower():
                         new_values.append(object)
                 window['select'].update(new_values)
             else:
@@ -150,7 +150,7 @@ class ViewCadastroMotorista(View):
                 new_values = []
                 search = values['input']
                 for object in list:
-                    if search in object.nome.lower():
+                    if search.lower() in object.nome.lower():
                         new_values.append(object)
                 window['select'].update(new_values)
             else:
