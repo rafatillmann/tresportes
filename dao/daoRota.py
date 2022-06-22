@@ -15,7 +15,7 @@ class DaoRota(AbstractDao):
         self.__dao_motorista = DaoMotorista
 
         try:
-            fields = 'id integer NOT NULL, inicio datetime NOT NULL, fim datetime NOT NULL, tempo_estimado float NOT NULL, motorista integer NOT NULL, deleted int DEFAULT 0, PRIMARY KEY(id AUTOINCREMENT), FOREIGN KEY(motorista) REFERENCES motorista(id)'
+            fields = 'id integer NOT NULL, inicio datetime NOT NULL, fim datetime NOT NULL, tempo_estimado float NOT NULL, motorista integer, deleted int DEFAULT 0, PRIMARY KEY(id AUTOINCREMENT), FOREIGN KEY(motorista) REFERENCES motorista(id)'
             self.__database.cursor.execute(
                 f'CREATE TABLE IF NOT EXISTS {self.__table_name} ({fields})')
             self.__database.connection.commit()

@@ -58,14 +58,32 @@ class ViewRota(View):
         button, values = window.read()
 
         if button == 'add':
-            loads = self.select_load()
+            values['loads'] = self.select_load()
 
         window.close()
 
         return button, values
 
+    def review(self):
+        pass
+
     def finish(self):
         pass
+
+    def select_load(self):
+        layout = [[sg.Text('Selecione as cargas do percurso', font=('Arial', 20, 'bold'))],
+                  [self.multiple_list([1, 2, 3, 4])],
+                  [self.white_button('Voltar', 'back'), self.button(
+                      'Selecionar', 'sel')]
+                  ]
+
+        window = self.window(layout)
+
+        button, values = window.read()
+
+        window.close()
+
+        return values
 
     def cards(self, list):
         cards = []
@@ -98,18 +116,3 @@ class ViewRota(View):
                            vertical_scroll_only=True, size=(None, 400), key='select')]
 
                 ]
-
-    def select_load(self):
-        layout = [[sg.Text('Selecione as cargas do percurso', font=('Arial', 20, 'bold'))],
-                  [self.multiple_list([1, 2, 3, 4])],
-                  [self.white_button('Voltar', 'back'), self.button(
-                      'Selecionar', 'sel')]
-                  ]
-
-        window = self.window(layout)
-
-        button, values = window.read()
-
-        window.close()
-
-        return values
