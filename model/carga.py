@@ -4,7 +4,6 @@ from model.rota import Rota
 
 class Carga():
     def __init__(self, categoria: Categoria, altura: float, largura: float, comprimento: float, peso: float, descricao: str, destinatario: Destinatario, rota: Rota, status: str):
-        super().__init__(nome, email, cpf, senha)
         self.__categoria = categoria
         self.__altura = altura
         self.__largura = largura
