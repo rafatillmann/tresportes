@@ -3,7 +3,7 @@ from model.motorista import Motorista
 
 
 class Rota:
-    def __init__(self, inicio: datetime, fim: datetime, tempo_estimado: float, motorista: Motorista):
+    def __init__(self, inicio: datetime = None, fim: datetime = None, tempo_estimado: float = None, motorista: Motorista = None):
         self.__id = None
         self.__inicio = inicio
         self.__fim = fim

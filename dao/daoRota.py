@@ -15,7 +15,7 @@ class DaoRota(AbstractDao):
         self.__dao_motorista = DaoMotorista
 
         try:
-            fields = 'id integer NOT NULL, inicio datetime, fim datetime, tempo_estimado float NOT NULL, motorista integer, deleted int DEFAULT 0, PRIMARY KEY(id AUTOINCREMENT), FOREIGN KEY(motorista) REFERENCES motorista(id)'
+            fields = 'id integer NOT NULL, inicio datetime, fim datetime, tempo_estimado float, motorista integer, deleted int DEFAULT 0, PRIMARY KEY(id AUTOINCREMENT), FOREIGN KEY(motorista) REFERENCES motorista(id)'
             self.__database.cursor.execute(
                 f'CREATE TABLE IF NOT EXISTS {self.__table_name} ({fields})')
             self.__database.connection.commit()
@@ -25,7 +25,7 @@ class DaoRota(AbstractDao):
 
     def insert(self, rota: Rota):
         fields = 'inicio, fim, tempo_estimado, motorista'
-        values = f'"{rota.inicio}", "{rota.fim}", "{rota.tempo_estimado}", "{rota.motorista.id}"'
+        values = f'"{rota.inicio}", "{rota.fim}", "{rota.tempo_estimado}", "{rota.motorista.id if rota.motorista else None}"'
         try:
             self.__database.cursor.execute(
                 f'INSERT INTO {self.__table_name} ({fields}) VALUES({values})')
@@ -39,7 +39,7 @@ class DaoRota(AbstractDao):
             return False
 
     def update(self, rota: Rota):
-        fields = f'inicio = "{rota.inicio}", fim = "{rota.fim}", tempo_estimado = "{rota.tempo_estimado}", motorista = "{rota.motorista.id}"'
+        fields = f'inicio = "{rota.inicio}", fim = "{rota.fim}", tempo_estimado = "{rota.tempo_estimado}", motorista = "{rota.motorista.id if rota.motorista else None}"'
 
         try:
             self.__database.cursor.execute(

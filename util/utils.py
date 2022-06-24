@@ -44,3 +44,7 @@ def email_validate(email):
         return True
     else:
         return False
+
+
+def sum_duration():
+    pass
