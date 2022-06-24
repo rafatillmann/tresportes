@@ -11,7 +11,7 @@ class DaoCarga(AbstractDao):
         self.__records = []
 
         try:
-            fields = 'id integer NOT NULL, nome varchar(255) NOT NULL, PRIMARY KEY(id AUTOINCREMENT)'
+            fields = 'id integer NOT NULL, categoria integer NOT NULL, altura REAL NOT NULL, largura REAL NOT NULL, comprimento REAL NOT NULL, peso REAL NOT NULL, descricao varchar(255) NOT NULL, destinatario integer NOT NULL, rota integer NOT NULL, status varchar(255), PRIMARY KEY(id AUTOINCREMENT)'
             self.__database.cursor.execute(
                 f'CREATE TABLE IF NOT EXISTS {self.__table_name} ({fields})')
             self.__database.connection.commit()
@@ -20,8 +20,8 @@ class DaoCarga(AbstractDao):
             self.__database.connection.rollback()
 
     def insert(self, carga: Carga):
-        fields = 'nome'
-        values = f'"{carga.nome}"'
+        fields = 'categoria, altura, largura, comprimento, peso, descricao, destinatario, rota, status'
+        values = f'"{carga.categoria.id}", "{carga.altura}", "{carga.largura}", "{carga.comprimento}", "{carga.peso}", "{carga.descricao}", "{carga.destinatario.id}", "{carga.rota.id}", "{carga.status}",'
         try:
             self.__database.cursor.execute(
                 f'INSERT INTO {self.__table_name} ({fields}) VALUES({values})')
@@ -35,7 +35,7 @@ class DaoCarga(AbstractDao):
             return False
 
     def update(self, carga: Carga):
-        fields = f'nome = "{carga.nome}"'
+        fields = f'categoria = "{carga.categoria.id}", altura = "{carga.altura}", largura = "{carga.largura}", comprimento = "{carga.comprimento}", peso = "{carga.peso}", descricao = "{carga.descricao}", destinatario = "{carga.destinatario.id}", rota = "{carga.rota.id}", status = "{carga.status}"'
 
         try:
             self.__database.cursor.execute(
@@ -73,7 +73,7 @@ class DaoCarga(AbstractDao):
             f'SELECT * FROM {self.__table_name}').fetchall()
 
         for record in records:
-            object = Carga(record[1])
+            object = Carga(record[1], record[2], record[3], record[4], record[5], record[6], record[7], record[8], record[9])
             object.id = record[0]
             self.__records.append(object)
 
