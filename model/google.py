@@ -22,7 +22,7 @@ class Google:
         origins = 'Rua Lauro Linhares, Florianópolis, Santa Catarina, Brasil'
 
         return self.client.distance_matrix(
-            origins, destinations, language='pt-br', region='bra')
+            origins, destinations, region='bra')
 
 
 API = Google()

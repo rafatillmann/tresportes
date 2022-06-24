@@ -1,5 +1,9 @@
+from ctypes import pointer
+from dao.daoPonto import DaoPonto
 from dao.daoRota import DaoRota
 from model.google import API
+from model.percurso import Percurso
+from model.ponto import Ponto
 from model.rota import Rota
 from util.utils import sum_duration
 from view.viewRota import ViewRota
@@ -11,6 +15,7 @@ class ControllerRota():
         self.__view = ViewRota()
         self.__session = session
         self.__dao_rota = DaoRota
+        self.__dao_ponto = DaoPonto
         self.__api = API
 
     def options(self):
@@ -57,7 +62,8 @@ class ControllerRota():
 
     def add(self):
         while True:
-            button, values = self.__view.select_load(['Rua Lauro Linhares'])
+            button, values = self.__view.select_load(
+                ['R. Delfino Conti'])
             if not self.__session.menu(button):
                 if button == 'back':
                     break
@@ -68,6 +74,7 @@ class ControllerRota():
                     #     destinations.append(
                     #         f'{value}, Florianópolis, Santa Catarina, Brasil')
                     # matrix = self.__api.request(destinations)
+                    # print(matrix)
                     # for row in matrix.get('rows'):
                     #     for element in row.get('elements'):
                     #         duration.append(element.get(
@@ -75,6 +82,18 @@ class ControllerRota():
 
                     route = Rota(tempo_estimado=10)
                     self.__dao_rota.insert(route)
+
+                    spots = []
+                    for address in matrix.get('destination_addresses'):
+                        spot = Ponto(endereco=address)
+                        self.__dao_ponto.insert(spot)
+                        spots.append(spot)
+
+                    for index, spot in enumerate(spots):
+                        road = Percurso(
+                            pontoA=spots[index], pontoB=spots[index+1], rota=route)
+                    # se secont is end break
+                    # https://stackoverflow.com/questions/22768060/python-do-things-to-current-element-and-next-element-in-list
 
                     # else:
                     #     pass

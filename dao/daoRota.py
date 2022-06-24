@@ -76,9 +76,6 @@ class DaoRota(AbstractDao):
     def deleted(self):
         return self.__deleted
 
-    def getLatest(self):
-        return self.__records[-1]
-
     def populate(self):
         records = self.__database.cursor.execute(
             f'SELECT * FROM {self.__table_name} WHERE deleted=0').fetchall()

@@ -5,7 +5,7 @@ from model.rota import Rota
 
 
 class Percurso:
-    def __init__(self, inicio: datetime, fim: datetime, pontoA: Ponto, pontoB: Ponto, rota: Rota):
+    def __init__(self, inicio: datetime = None, fim: datetime = None, pontoA: Ponto = None, pontoB: Ponto = None, rota: Rota = None):
         self.__id = None
         self.__inicio = inicio
         self.__fim = fim

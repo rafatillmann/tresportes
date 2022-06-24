@@ -1,5 +1,5 @@
 class Ponto:
-    def __init__(self, descricao: str, endereco: str):
+    def __init__(self, descricao: str = None, endereco: str = None):
         self.__id = None
         self.__descricao = descricao
         self.__endereco = endereco
