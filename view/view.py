@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 import PySimpleGUI as sg
-from tkinter import CENTER, RIGHT, TOP
+from tkinter import CENTER, LEFT, RIGHT, TOP
 
 from util.session import Session
 
@@ -31,7 +31,7 @@ class View(ABC):
 
     def window(self, layout):
         screen = [
-            [sg.Column(self.menu(), vertical_alignment=TOP, background_color="#222624", element_justification=CENTER, pad=0, expand_y=True), sg.Column(layout, pad=(20, 20))]]
+            [sg.Column(self.menu(), vertical_alignment=TOP, background_color="#222624", element_justification=CENTER, pad=0, expand_y=True), sg.Column(layout, pad=(20, 20), vertical_alignment=TOP)]]
         return sg.Window('Trêsportes', screen,
                          default_element_size=(12, 1), margins=(0, 0), resizable=True)
 

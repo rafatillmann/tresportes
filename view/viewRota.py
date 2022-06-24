@@ -44,25 +44,31 @@ class ViewRota(View):
 
         return button, values
 
-    def display(self):
+    def display(self, list_loads):
         layout = [[sg.Text('Criar nova rota', font=('Arial', 20, 'bold'))],
                   [sg.Text('Cargas', font=('Arial', 14, 'bold'))],
                   [sg.Text('Nenhuma carga adicionada',
-                           font=('Arial', 10, 'bold')), self.button('Adicionar', 'add')],
+                           font=('Arial', 10, 'bold'), key='msg'), self.button('Adicionar', 'add')],
+                  [sg.Text('', pad=((0, 0), (0, 200)))],
                   [self.white_button('Descartar', 'cancel'),
                    self.button('Concluir', 'save')]
                   ]
 
         window = self.window(layout)
+        loads = None
 
-        button, values = window.read()
+        while True:
+            button, values = window.read()
 
-        if button == 'add':
-            values['loads'] = self.select_load()
+            if button == 'add':
+                loads = self.select_load(list_loads)
+                window['msg'].update('aaaa')
+            else:
+                break
 
         window.close()
 
-        return button, values
+        return button, values, loads
 
     def review(self):
         pass
@@ -70,9 +76,9 @@ class ViewRota(View):
     def finish(self):
         pass
 
-    def select_load(self):
+    def select_load(self, list):
         layout = [[sg.Text('Selecione as cargas do percurso', font=('Arial', 20, 'bold'))],
-                  [self.multiple_list([1, 2, 3, 4])],
+                  [self.multiple_list(list)],
                   [self.white_button('Voltar', 'back'), self.button(
                       'Selecionar', 'sel')]
                   ]
@@ -83,7 +89,8 @@ class ViewRota(View):
 
         window.close()
 
-        return values
+        if button == 'sel':
+            return values['select']
 
     def cards(self, list):
         cards = []

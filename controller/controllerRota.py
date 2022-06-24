@@ -23,12 +23,19 @@ class ControllerRota():
 
     def insert(self):
         while True:
-            button, values = self.__view.display()
+            list_loads = [1, 2, 3, 4]
+            button, values, loads = self.__view.display(list_loads)
             if not self.__session.menu(button):
                 if button == 'cancel':
                     break
                 elif button == 'save':
-                    pass
+                    if loads:
+                        self.add(loads)
+                    else:
+                        break
 
     def finish(self):
+        pass
+
+    def add(self, values):
         pass
