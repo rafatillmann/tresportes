@@ -44,34 +44,37 @@ class ViewRota(View):
 
         return button, values
 
-    def display(self, list_loads):
+    def inicial(self):
         layout = [[sg.Text('Criar nova rota', font=('Arial', 20, 'bold'))],
                   [sg.Text('Cargas', font=('Arial', 14, 'bold'))],
-                  [sg.Text('Nenhuma carga adicionada',
+                  [sg.Text('Selecione as cargas dessa rota',
                            font=('Arial', 10, 'bold'), key='msg'), self.button('Adicionar', 'add')],
                   [sg.Text('', pad=((0, 0), (0, 200)))],
                   [self.white_button('Descartar', 'cancel'),
-                   self.button('Concluir', 'save')]
+                   self.button('Concluir', 'save', disableb=True)]
                   ]
 
         window = self.window(layout)
-        loads = None
 
-        while True:
-            button, values = window.read()
-
-            if button == 'add':
-                loads = self.select_load(list_loads)
-                window['msg'].update('aaaa')
-            else:
-                break
+        button, values = window.read()
 
         window.close()
 
-        return button, values, loads
+        return button, values
 
-    def review(self):
-        pass
+    def edit(self):
+        layout = [[sg.Text('Criar nova rota', font=('Arial', 20, 'bold'))],
+                  [sg.Text('Cargas', font=('Arial', 14, 'bold'))],
+
+                  ]
+
+        window = self.window(layout)
+
+        button, values = window.read()
+
+        window.close()
+
+        return button, values
 
     def finish(self):
         pass
@@ -89,8 +92,7 @@ class ViewRota(View):
 
         window.close()
 
-        if button == 'sel':
-            return values['select']
+        return button, values
 
     def cards(self, list):
         cards = []

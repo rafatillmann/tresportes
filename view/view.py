@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from json import tool
 import PySimpleGUI as sg
 from tkinter import CENTER, LEFT, RIGHT, TOP
 
@@ -64,9 +65,9 @@ class View(ABC):
         return sg.Listbox(list, expand_x=True, font=(12),
                           expand_y=True, size=(None, 20), key='select', select_mode='multiple')
 
-    def button(self, text, key):
+    def button(self, text, key, disableb=None, tooltip=None):
         return sg.Button(text, key=key, font=(
-            'Arial', 10, 'bold'), size=(10, 1), border_width=0)
+            'Arial', 10, 'bold'), size=(10, 1), border_width=0, disabled=disableb, tooltip=tooltip)
 
     def white_button(self, text, key):
         return sg.Button(text, key=key, font=(
