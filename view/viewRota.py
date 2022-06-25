@@ -1,5 +1,5 @@
 from array import array
-from tkinter import BOTTOM, CENTER
+from tkinter import BOTTOM, CENTER, TOP
 from view.view import View
 import PySimpleGUI as sg
 
@@ -18,7 +18,7 @@ class ViewRota(View):
                       'Arial', 10, 'bold')), sg.Button('Visualizar finalizadas', key='finish', font=('Arial', 10, 'bold'))],
                   [sg.Input(size=(20, 5), key='input', expand_x=True)],
                   [sg.Column(cards, scrollable=True,
-                             vertical_scroll_only=True, size=(None, 400), key='select')]
+                             vertical_scroll_only=True, sbar_relief='solid', size=(None, 400), key='select')]
 
                   ]
 
@@ -45,14 +45,17 @@ class ViewRota(View):
         return button, values
 
     def inicial(self):
-        layout = [[sg.Text('Criar nova rota', font=('Arial', 20, 'bold'))],
-                  [sg.Text('Cargas', font=('Arial', 14, 'bold'))],
-                  [sg.Text('Selecione as cargas dessa rota',
-                           font=('Arial', 10, 'bold'), key='msg'), self.button('Adicionar', 'add')],
-                  [sg.Text('', pad=((0, 0), (0, 200)))],
-                  [self.white_button('Descartar', 'cancel'),
-                   self.button('Concluir', 'save', disableb=True)]
-                  ]
+        info = [
+            [sg.Text('Criar nova rota', font=('Arial', 20, 'bold'))],
+            [sg.Text('Cargas', font=('Arial', 14, 'bold'))],
+            [sg.Text('Selecione as cargas dessa rota',
+                     font=('Arial', 10, 'bold'), key='msg'), self.button('Adicionar', 'add')],
+            [sg.Sizer(v_pixels=300)],
+
+        ]
+
+        layout = [[sg.Column(info)], [self.white_button('Descartar', 'cancel'),
+                                      self.button('Concluir', 'save', disableb=True)]]
 
         window = self.window(layout)
 
@@ -63,9 +66,13 @@ class ViewRota(View):
         return button, values
 
     def edit(self, route):
-        layout = [[sg.Text('Criar nova rota', font=('Arial', 20, 'bold'))],
-                  [sg.Text('Cargas', font=('Arial', 14, 'bold'))],
-
+        road = self.road()
+        loads = self.loads([1, 2, 3, 4])
+        layout = [[sg.Text('Revisão', font=('Arial', 20, 'bold'))],
+                  [sg.Column(road, vertical_alignment=TOP),
+                   sg.Column(loads, vertical_alignment=TOP)],
+                  [self.white_button('Descartar', 'cancel'),
+                   self.button('Concluir', 'save')]
                   ]
 
         window = self.window(layout)
@@ -125,3 +132,36 @@ class ViewRota(View):
                            vertical_scroll_only=True, size=(None, 400), key='select')]
 
                 ]
+
+    def road(self):
+        info = [[sg.Sizer(500)],
+                [sg.Text('dfdfdfdfdfd', font=('Arial', 10, 'bold'),
+                         background_color='#D9D9D9')],
+                [sg.Image(source='./assets/points.png',
+                          background_color='#D9D9D9')],
+                [sg.Text('fsfsfsdfsfsdfs', font=('Arial', 10, 'bold'),
+                         background_color='#D9D9D9')]]
+
+        card = [
+            [sg.Text('Percurso', font=('Arial', 14, 'bold'))], [
+                sg.Column(info, background_color='#D9D9D9', element_justification=CENTER)]]
+
+        return card
+
+    def loads(self, list):
+        cards = []
+        for item in list:
+            info = [[sg.Sizer(500)],
+                    [sg.Text(f'kjddjksdj', font=('Arial', 10, 'bold'), background_color='#D9D9D9'), sg.Text(
+                        f'kjddkskdsksskskjksdj', font=('Arial', 10, 'bold'), background_color='#D9D9D9')],
+                    ]
+
+            cards.append(
+                [sg.Column(info, background_color='#D9D9D9')])
+
+        loads = [[sg.Text('Cargas', font=('Arial', 14, 'bold'))],
+                 [sg.Column(cards, scrollable=True, vertical_scroll_only=True,
+                            sbar_arrow_width=5, sbar_width=5, sbar_relief='solid')],
+                 [self.white_button('Editar', 'edit')]]
+
+        return loads
