@@ -62,7 +62,7 @@ class ViewRota(View):
 
         return button, values
 
-    def edit(self):
+    def edit(self, route):
         layout = [[sg.Text('Criar nova rota', font=('Arial', 20, 'bold'))],
                   [sg.Text('Cargas', font=('Arial', 14, 'bold'))],
 

@@ -68,6 +68,11 @@ class DaoPonto(AbstractDao):
     def list(self):
         return self.__records
 
+    def getOrigins(self):
+        for record in self.__records:
+            if(record.endereco == 'R. Lauro Linhares - Trindade, Florianópolis - SC, Brazil'):
+                return record
+
     def populate(self):
         records = self.__database.cursor.execute(
             f'SELECT * FROM {self.__table_name}').fetchall()

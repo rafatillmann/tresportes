@@ -1,11 +1,13 @@
 from ctypes import pointer
+from dis import disco
+from operator import contains
+from dao.daoPercuso import DaoPercurso
 from dao.daoPonto import DaoPonto
 from dao.daoRota import DaoRota
 from model.google import API
 from model.percurso import Percurso
 from model.ponto import Ponto
 from model.rota import Rota
-from util.utils import sum_duration
 from view.viewRota import ViewRota
 
 
@@ -16,6 +18,7 @@ class ControllerRota():
         self.__session = session
         self.__dao_rota = DaoRota
         self.__dao_ponto = DaoPonto
+        self.__dao_percurso = DaoPercurso
         self.__api = API
 
     def options(self):
@@ -25,8 +28,9 @@ class ControllerRota():
             if not self.__session.menu(button):
                 if button == 'insert':
                     self.insert()
-                elif button == 'edit':
-                    break
+                elif 'edit' in button:
+                    route = self.__dao_rota.read(int(button.split(':')[1]))
+                    self.edit(route)
                 elif button == 'finish':
                     self.finish()
 
@@ -42,66 +46,84 @@ class ControllerRota():
             except Exception:
                 self.__view.popUp()
 
-    def edit(self, values):
+    def edit(self, route):
         while True:
-            button, values = self.__view.edit()
+            button, values = self.__view.edit(route)
             if not self.__session.menu(button):
                 pass
 
     def finish(self):
         while True:
             list = self.__dao_rota.deleted()
-            button, values = self.__view.options(list)
+            button, values = self.__view.finish(list)
             if not self.__session.menu(button):
                 if button == 'insert':
                     self.insert()
-                elif button == 'edit':
-                    break
                 elif button == 'finish':
                     self.finish()
 
     def add(self):
         while True:
             button, values = self.__view.select_load(
-                ['R. Delfino Conti'])
+                ['R. Delfino Conti', 'R. Alipia Santana Martins'])
             if not self.__session.menu(button):
                 if button == 'back':
                     break
                 elif button == 'sel':
-                    # destinations = []
-                    # duration = []
-                    # for value in values['select']:
-                    #     destinations.append(
-                    #         f'{value}, Florianópolis, Santa Catarina, Brasil')
-                    # matrix = self.__api.request(destinations)
-                    # print(matrix)
-                    # for row in matrix.get('rows'):
-                    #     for element in row.get('elements'):
-                    #         duration.append(element.get(
-                    #             'duration').get('text'))
+                    destinations = []
+                    duration = []
+                    origins = self.__dao_ponto.getOrigins()
+                    for value in values['select']:
+                        destinations.append(
+                            f'{value}, Florianópolis, Santa Catarina, Brasil')
+                    matrix = self.__api.request(origins.endereco, destinations)
 
-                    route = Rota(tempo_estimado=10)
+                    for row in matrix.get('rows'):
+                        for element in row.get('elements'):
+                            duration.append(element.get(
+                                'duration').get('text'))
+
+                    duration = self.convertTimes(duration)
+
+                    dt = {}
+                    for i, address in enumerate(matrix.get('destination_addresses')):
+                        dt[address] = duration[i]
+
+                    dt = {key: value for key, value in sorted(
+                        dt.items(), key=lambda item: item[1])}
+
+                    route = Rota(tempo_estimado=sum(dt.values()))
                     self.__dao_rota.insert(route)
 
                     spots = []
-                    for address in matrix.get('destination_addresses'):
-                        spot = Ponto(endereco=address)
-                        self.__dao_ponto.insert(spot)
-                        spots.append(spot)
+                    spots.append(origins)
+                    for key, value in dt.items():
+                        spot = Ponto(endereco=key)
+                        if self.__dao_ponto.insert(spot):
+                            spots.append(spot)
 
-                    for index, spot in enumerate(spots):
-                        road = Percurso(
-                            pontoA=spots[index], pontoB=spots[index+1], rota=route)
-                    # se secont is end break
-                    # https://stackoverflow.com/questions/22768060/python-do-things-to-current-element-and-next-element-in-list
+                    for cur, nxt in zip(spots, spots[1:] + ['end']):
+                        if nxt == 'end':
+                            break
+                        else:
+                            road = Percurso(pontoA=cur, pontoB=nxt, rota=route)
+                            self.__dao_percurso.insert(road)
 
-                    # else:
-                    #     pass
-                    # for por cada carga capturando o endereço e criando um array de endereços
-                    # enviar para o request
-                    # somar o tempo de todos e criar uma rota, ver método que pega último registro no banco
-                    # for em cada resposta e criando os pontos e logo em seguida preenche o percurso
-                    # for pontos percurso pontoA recebe atual e B o próximo, analisar questão do primeiro ponto
-                    # chada tela edit enviando o id da nova rota
+                    self.edit(route)
 
-                    # ver de criar dois add ou ele recebe id rota e atualiza quaso tenha id
+    def convertTimes(self, array):
+
+        duration = []
+        for string in array:
+            result = ''.join([i for i in string if i.isdigit() or i == ' '])
+
+            if 'h' in string:
+                values = result.split()
+                minutes = int(values[0]) * 60 + int(values[1])
+                duration.append(minutes)
+            else:
+                values = result.split()
+                minutes = int(values[0])
+                duration.append(minutes)
+
+        return duration
