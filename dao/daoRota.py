@@ -25,10 +25,11 @@ class DaoRota(AbstractDao):
 
     def insert(self, rota: Rota):
         fields = 'inicio, fim, tempo_estimado, motorista'
-        values = f'"{rota.inicio}", "{rota.fim}", "{rota.tempo_estimado}", "{rota.motorista.id if rota.motorista else None}"'
+        values = (rota.inicio, rota.fim, rota.tempo_estimado,
+                  rota.motorista.id if rota.motorista else None)
         try:
             self.__database.cursor.execute(
-                f'INSERT INTO {self.__table_name} ({fields}) VALUES({values})')
+                f'INSERT INTO {self.__table_name} ({fields}) VALUES(?, ?, ?, ?)', values)
             self.__database.connection.commit()
 
             rota.id = self.__database.cursor.lastrowid
@@ -39,14 +40,17 @@ class DaoRota(AbstractDao):
             return False
 
     def update(self, rota: Rota):
-        fields = f'inicio = "{rota.inicio}", fim = "{rota.fim}", tempo_estimado = "{rota.tempo_estimado}", motorista = "{rota.motorista.id if rota.motorista else None}"'
+        fields = f'inicio = ?, fim = ?, tempo_estimado = ?, motorista = ?'
+        values = (rota.inicio, rota.fim, rota.tempo_estimado,
+                  rota.motorista.id if rota.motorista else None)
 
         try:
             self.__database.cursor.execute(
-                f'UPDATE {self.__table_name} SET {fields} WHERE id = {rota.id}')
+                f'UPDATE {self.__table_name} SET {fields} WHERE id = {rota.id}', values)
             self.__database.connection.commit()
             return True
         except OperationalError as error:
+            print(error)
             self.__database.connection.rollback()
             return False
 

@@ -27,10 +27,11 @@ class DaoPercurso(AbstractDao):
 
     def insert(self, percurso: Percurso):
         fields = 'inicio, fim, pontoA, pontoB, rota'
-        values = f'"{percurso.inicio}", "{percurso.fim}", "{percurso.pontoA.id}", "{percurso.pontoB.id}", "{percurso.rota.id}"'
+        values = (percurso.inicio, percurso.fim, percurso.pontoA.id,
+                  percurso.pontoB.id, percurso.rota.id)
         try:
             self.__database.cursor.execute(
-                f'INSERT INTO {self.__table_name} ({fields}) VALUES({values})')
+                f'INSERT INTO {self.__table_name} ({fields}) VALUES(?, ?, ?, ?, ?)', values)
             self.__database.connection.commit()
 
             percurso.id = self.__database.cursor.lastrowid
@@ -41,11 +42,13 @@ class DaoPercurso(AbstractDao):
             return False
 
     def update(self, percurso: Percurso):
-        fields = f'inicio = "{percurso.inicio}", fim = "{percurso.fim}", pontoA = "{percurso.pontoA.id}", pontoB = "{percurso.pontoB.id}", rota= "{percurso.rota.id}"'
+        fields = f'inicio = ?, fim = ?, pontoA = ?, pontoB = ?, rota= ?'
+        values = (percurso.inicio, percurso.fim, percurso.pontoA.id,
+                  percurso.pontoB.id, percurso.rota.id)
 
         try:
             self.__database.cursor.execute(
-                f'UPDATE {self.__table_name} SET {fields} WHERE id = {percurso.id}')
+                f'UPDATE {self.__table_name} SET {fields} WHERE id = {percurso.id}', values)
             self.__database.connection.commit()
             return True
         except OperationalError as error:

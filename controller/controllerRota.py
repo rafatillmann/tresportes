@@ -59,7 +59,7 @@ class ControllerRota():
                 if button == 'cancel':
                     break
                 elif button == 'edit':
-                    self.add()
+                    self.add(route)
                 elif button == 'save':
                     self.options()
 
@@ -81,11 +81,11 @@ class ControllerRota():
                 elif button == 'finish':
                     self.finish()
 
-    def add(self):
+    def add(self, route=None):
         while True:
             list = self.__controller_carga.read_unused()
             button, values = self.__view.select_load(
-                ['R. Alipia Santana Martins'])
+                ['R. Alipia Santana Martins', 'R. Delfino Conti'])
             if not self.__session.menu(button):
                 if button == 'back':
                     break
@@ -112,8 +112,17 @@ class ControllerRota():
                     dt = {key: value for key, value in sorted(
                         dt.items(), key=lambda item: item[1])}
 
-                    route = Rota(tempo_estimado=sum(dt.values()))
-                    self.__dao_rota.insert(route)
+                    if route:
+                        route.tempo_estimado = sum(dt.values())
+                        self.__dao_rota.update(route)
+
+                        roads = self.__dao_percurso.read_route_not_finish(
+                            route)
+                        for road in roads:
+                            self.__dao_percurso.delete(road)
+                    else:
+                        route = Rota(tempo_estimado=sum(dt.values()))
+                        self.__dao_rota.insert(route)
 
                     spots = []
                     spots.append(origins)
