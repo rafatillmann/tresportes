@@ -1,6 +1,8 @@
 from util.utils import cpf_validate, email_validate, generate_random_password
 from view.viewCarga import ViewCarga
 from dao.daoCarga import DaoCarga
+from dao.daoCategoria import DaoCategoria
+from dao.daoDestinatario import DaoDestinatario
 from model.carga import Carga
 
 
@@ -8,6 +10,8 @@ class ControllerCarga():
 
     def __init__(self, session):
         self.__dao_carga = DaoCarga
+        self.__dao_categoria = DaoCategoria
+        self.__dao_destinatario = DaoDestinatario
         self.__view = ViewCarga()
         self.__session = session
 
@@ -32,12 +36,12 @@ class ControllerCarga():
                     if button == 'cancel':
                         break
                     elif button == 'save':
+                        destinatario = self.__dao_destinatario.read(values['cpf'])
                         carga = Carga(values['categoria'], values['altura'], values['largura'], values['comprimento'],
                                             values['peso'], values['descricao'], values['cpf'], '123', 'Não alocada')
                         self.__dao_carga.insert(carga)
                         break
             except Exception:
-                print(Exception)
                 self.__view.popUp()
 
     def update(self, carga: Carga):

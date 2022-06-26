@@ -23,7 +23,7 @@ class DaoCarga(AbstractDao):
 
     def insert(self, carga: Carga):
         fields = 'categoria, altura, largura, comprimento, peso, descricao, destinatario, rota, status'
-        values = f'"{carga.categoria.id}", "{carga.altura}", "{carga.largura}", "{carga.comprimento}", "{carga.peso}", "{carga.descricao}", "{carga.destinatario.id}", "{carga.rota.id}", "{carga.status}",'
+        values = f'"{carga.categoria}", "{carga.altura}", "{carga.largura}", "{carga.comprimento}", "{carga.peso}", "{carga.descricao}", "{carga.destinatario}", "{carga.rota}", "{carga.status}"'
         try:
             self.__database.cursor.execute(
                 f'INSERT INTO {self.__table_name} ({fields}) VALUES({values})')
@@ -37,7 +37,7 @@ class DaoCarga(AbstractDao):
             return False
 
     def update(self, carga: Carga):
-        fields = f'categoria = "{carga.categoria.id}", altura = "{carga.altura}", largura = "{carga.largura}", comprimento = "{carga.comprimento}", peso = "{carga.peso}", descricao = "{carga.descricao}", destinatario = "{carga.destinatario.id}", rota = "{carga.rota.id}", status = "{carga.status}"'
+        fields = f'categoria = "{carga.categoria}", altura = "{carga.altura}", largura = "{carga.largura}", comprimento = "{carga.comprimento}", peso = "{carga.peso}", descricao = "{carga.descricao}", destinatario = "{carga.destinatario}", rota = "{carga.rota}", status = "{carga.status}"'
 
         try:
             self.__database.cursor.execute(
@@ -77,7 +77,7 @@ class DaoCarga(AbstractDao):
 
     def read_by_route(self, route_id: int):
         for record in self.__records:
-            if(record.rota.id == route_id):
+            if(record.rota == route_id):
                 return record
 
     def list(self):

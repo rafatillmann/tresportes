@@ -15,10 +15,10 @@ class ViewCarga(View):
 
         layout = [[sg.Text('Cargas', font=('Arial', 20, 'bold'))],
                   [sg.Button('Criar nova carga', key='insert', font=('Arial', 10, 'bold')), sg.Button('Pesquisar', key='search', font=(
-                      'Arial', 10, 'bold')), sg.Button('Visualizar finalizadas', key='finish', font=('Arial', 10, 'bold'))],
+                      'Arial', 10, 'bold'))],
                   [sg.Input(size=(20, 5), key='input', expand_x=True)],
                   [sg.Column(cards, scrollable=True,
-                             vertical_scroll_only=True, sbar_relief='solid', size=(None, 400), key='select')]
+                             vertical_scroll_only=True, sbar_relief='solid', size=(500, 400), key='select')]
 
                   ]
 
