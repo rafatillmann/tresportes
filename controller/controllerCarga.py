@@ -23,10 +23,8 @@ class ControllerCarga():
                 if button == 'insert':
                     self.insert()
                 elif 'edit' in button:
-                    route = self.__dao_carga.read(int(button.split(':')[1]))
-                    self.edit(route)
-                elif button == 'finish':
-                    self.finish()
+                    carga = self.__dao_carga.read(int(button.split(':')[1]))
+                    self.update(carga)
 
     def insert(self):
         while True:
@@ -45,7 +43,16 @@ class ControllerCarga():
                 self.__view.popUp()
 
     def update(self, carga: Carga):
-        pass
+        while True:
+            try:
+                button, values = self.__view.edit(carga)
+                if not self.__session.menu(button):
+                    if button == 'cancel':
+                        break
+                    elif button == 'save':
+                        break
+            except Exception:
+                self.__view.popUp()
 
     def delete(self, carga: Carga):
         if self.__dao_carga.delete(carga):
