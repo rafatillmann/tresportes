@@ -1,3 +1,4 @@
+from controller.controllerCarga import ControllerCarga
 from controller.controllerMotorista import ControllerMotorista
 from controller.controllerRota import ControllerRota
 from controller.controllerCarga import ControllerCarga

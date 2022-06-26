@@ -2,6 +2,7 @@ from model.categoria import Categoria
 from model.destinatario import Destinatario
 from model.rota import Rota
 
+
 class Carga():
     def __init__(self, categoria: Categoria, altura: float, largura: float, comprimento: float, peso: float, descricao: str, destinatario: Destinatario, rota: Rota, status: str):
         self.__categoria = categoria
@@ -29,7 +30,7 @@ class Carga():
     @altura.setter
     def altura(self, altura: float):
         self.__altura = altura
-    
+
     @property
     def largura(self):
         return self.__largura
@@ -45,7 +46,7 @@ class Carga():
     @comprimento.setter
     def comprimento(self, comprimento: float):
         self.__comprimento = comprimento
-    
+
     @property
     def peso(self):
         return self.__peso
@@ -85,4 +86,6 @@ class Carga():
     @status.setter
     def status(self, status: str):
         self.__status = status
-    
+
+    def __str__(self):
+        return f'{self.__destinatario.endereco}'

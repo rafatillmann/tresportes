@@ -21,10 +21,10 @@ class DaoPonto(AbstractDao):
 
     def insert(self, ponto: Ponto):
         fields = 'descricao, endereco'
-        values = f'"{ponto.descricao}", "{ponto.endereco}"'
+        values = (ponto.descricao, ponto.endereco)
         try:
             self.__database.cursor.execute(
-                f'INSERT INTO {self.__table_name} ({fields}) VALUES({values})')
+                f'INSERT INTO {self.__table_name} ({fields}) VALUES(?, ?)', values)
             self.__database.connection.commit()
 
             ponto.id = self.__database.cursor.lastrowid
@@ -35,11 +35,12 @@ class DaoPonto(AbstractDao):
             return False
 
     def update(self, ponto: Ponto):
-        fields = f'descricao = "{ponto.descricao}", endereco = "{ponto.endereco}"'
+        fields = f'descricao = ?, endereco = ?'
+        values = (ponto.descricao, ponto.endereco)
 
         try:
             self.__database.cursor.execute(
-                f'UPDATE {self.__table_name} SET {fields} WHERE id = {ponto.id}')
+                f'UPDATE {self.__table_name} SET {fields} WHERE id = {ponto.id}', values)
             self.__database.connection.commit()
             return True
         except OperationalError as error:

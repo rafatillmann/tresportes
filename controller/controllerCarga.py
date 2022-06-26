@@ -57,5 +57,3 @@ class ControllerCarga():
 
     def read_by_route(self, route_id):
         return self.__dao_carga.read_by_route(route_id)
-
-
