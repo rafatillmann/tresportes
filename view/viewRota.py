@@ -1,4 +1,5 @@
 from array import array
+from pickle import TRUE
 from tkinter import BOTTOM, CENTER, TOP
 from view.view import View
 import PySimpleGUI as sg
@@ -14,8 +15,8 @@ class ViewRota(View):
         cards = self.cards(inicial_list)
 
         layout = [[sg.Text('Rotas', font=('Arial', 20, 'bold'))],
-                  [sg.Button('Criar nova rota', key='insert', font=('Arial', 10, 'bold')), sg.Button('Pesquisar', key='search', font=(
-                      'Arial', 10, 'bold')), sg.Button('Visualizar finalizadas', key='finish', font=('Arial', 10, 'bold'))],
+                  [sg.Button('Criar nova rota', key='insert', font=('Arial', 10, 'bold'), border_width=0), sg.Button('Pesquisar', key='search', font=(
+                      'Arial', 10, 'bold'), border_width=0), sg.Button('Visualizar finalizadas', key='finish', font=('Arial', 10, 'bold'), border_width=0)],
                   [sg.Input(size=(20, 5), key='input', expand_x=True)],
                   [sg.Column(cards, scrollable=True,
                              vertical_scroll_only=True, sbar_relief='solid', size=(None, 400), key='select')]
@@ -67,13 +68,33 @@ class ViewRota(View):
 
     def edit(self, route):
         road = self.road()
-        loads = self.loads([1, 2, 3, 4])
+        loads = [1, 2, 3, 4]
+        loads = self.loads(loads)
         layout = [[sg.Text('Revisão', font=('Arial', 20, 'bold'))],
                   [sg.Column(road, vertical_alignment=TOP),
                    sg.Column(loads, vertical_alignment=TOP)],
                   [sg.Sizer(v_pixels=80)],
                   [self.white_button('Descartar', 'cancel'),
                    self.button('Concluir', 'save')]
+                  ]
+
+        window = self.window(layout)
+
+        button, values = window.read()
+
+        window.close()
+
+        return button, values
+
+    def view(self, route):
+        road = self.road()
+        loads = [1, 2, 3, 4]
+        loads = self.loads(loads, view=True)
+        layout = [[sg.Text(f'Rota {route.id}', font=('Arial', 20, 'bold'))],
+                  [sg.Column(road, vertical_alignment=TOP),
+                   sg.Column(loads, vertical_alignment=TOP)],
+                  [sg.Sizer(v_pixels=80)],
+                  [self.button('Voltar', 'back')]
                   ]
 
         window = self.window(layout)
@@ -182,7 +203,7 @@ class ViewRota(View):
 
         return card
 
-    def loads(self, list):
+    def loads(self, list, view=False):
         cards = []
         for item in list:
             info = [[sg.Sizer(500)],
@@ -196,6 +217,6 @@ class ViewRota(View):
         loads = [[sg.Text('Cargas', font=('Arial', 14, 'bold'))],
                  [sg.Column(cards, scrollable=True, vertical_scroll_only=True,
                             sbar_arrow_width=5, sbar_width=5, sbar_relief='solid')],
-                 [self.white_button('Editar', 'edit')]]
+                 [self.white_button('Editar', 'edit') if not view else sg.Text('')]]
 
         return loads

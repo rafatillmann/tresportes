@@ -1,3 +1,4 @@
+from controller.controllerCarga import ControllerCarga
 from controller.controllerMotorista import ControllerMotorista
 from controller.controllerRota import ControllerRota
 
@@ -7,6 +8,7 @@ class ControllerSession():
     def __init__(self):
         self.__controller_motorista = ControllerMotorista(self)
         self.__controller_rota = ControllerRota(self)
+        self.__controller_carga = ControllerCarga(self)
 
     def menu(self, button):
 

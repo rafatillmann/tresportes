@@ -1,6 +1,7 @@
 from ctypes import pointer
 from dis import disco
 from operator import contains
+from controller.controllerCarga import ControllerCarga
 from dao.daoPercuso import DaoPercurso
 from dao.daoPonto import DaoPonto
 from dao.daoRota import DaoRota
@@ -20,6 +21,7 @@ class ControllerRota():
         self.__dao_ponto = DaoPonto
         self.__dao_percurso = DaoPercurso
         self.__api = API
+        self.__controller_carga = ControllerCarga(session)
 
     def options(self):
         while True:
@@ -31,6 +33,9 @@ class ControllerRota():
                 elif 'edit' in button:
                     route = self.__dao_rota.read(int(button.split(':')[1]))
                     self.edit(route)
+                elif 'view' in button:
+                    route = self.__dao_rota.read(int(button.split(':')[1]))
+                    self.view(route)
                 elif button == 'finish':
                     self.finish()
 
@@ -55,7 +60,14 @@ class ControllerRota():
                 elif button == 'edit':
                     self.add()
                 elif button == 'save':
-                    pass
+                    self.options()
+
+    def view(self, route):
+        while True:
+            button, values = self.__view.view(route)
+            if not self.__session.menu(button):
+                if button == 'back':
+                    break
 
     def finish(self):
         while True:
@@ -69,8 +81,9 @@ class ControllerRota():
 
     def add(self):
         while True:
+            list = self.__controller_carga.read_unused()
             button, values = self.__view.select_load(
-                ['R. Delfino Conti', 'R. Alipia Santana Martins'])
+                ['R. Alipia Santana Martins'])
             if not self.__session.menu(button):
                 if button == 'back':
                     break

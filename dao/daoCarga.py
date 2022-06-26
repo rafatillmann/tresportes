@@ -1,5 +1,6 @@
 from sqlite3 import OperationalError
 from dao.abstractDao import AbstractDao
+from dao.daoDestinatario import DaoDestinatario
 from database.db import DB
 from model.carga import Carga
 
@@ -9,9 +10,10 @@ class DaoCarga(AbstractDao):
         self.__database = DB
         self.__table_name = 'carga'
         self.__records = []
+        self.__dao_destinatario = DaoDestinatario
 
         try:
-            fields = 'id integer NOT NULL, categoria integer NOT NULL, altura REAL NOT NULL, largura REAL NOT NULL, comprimento REAL NOT NULL, peso REAL NOT NULL, descricao varchar(255) NOT NULL, destinatario integer NOT NULL, rota integer NOT NULL, status varchar(255), PRIMARY KEY(id AUTOINCREMENT)'
+            fields = 'id integer NOT NULL, categoria integer, altura REAL NOT NULL, largura REAL NOT NULL, comprimento REAL NOT NULL, peso REAL NOT NULL, descricao varchar(255) NOT NULL, destinatario integer NOT NULL, rota integer, status varchar(255), PRIMARY KEY(id AUTOINCREMENT)'
             self.__database.cursor.execute(
                 f'CREATE TABLE IF NOT EXISTS {self.__table_name} ({fields})')
             self.__database.connection.commit()
@@ -64,16 +66,16 @@ class DaoCarga(AbstractDao):
         for record in self.__records:
             if(record.id == id):
                 return record
-    
+
     def read_unused(self):
         records = []
         for record in self.__records:
             if(not record.rota):
-                records.append(record) 
-        
+                records.append(record)
+
         return records
-    
-    def read_by_route(self, route_id: int):gh
+
+    def read_by_route(self, route_id: int):
         for record in self.__records:
             if(record.rota.id == route_id):
                 return record
@@ -86,7 +88,8 @@ class DaoCarga(AbstractDao):
             f'SELECT * FROM {self.__table_name}').fetchall()
 
         for record in records:
-            object = Carga(record[1], record[2], record[3], record[4], record[5], record[6], record[7], record[8], record[9])
+            object = Carga(record[1], record[2], record[3], record[4],
+                           record[5], record[6], record[7], record[8], record[9])
             object.id = record[0]
             self.__records.append(object)
 
