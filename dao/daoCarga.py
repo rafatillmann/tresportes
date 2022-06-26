@@ -64,6 +64,19 @@ class DaoCarga(AbstractDao):
         for record in self.__records:
             if(record.id == id):
                 return record
+    
+    def read_unused(self):
+        records = []
+        for record in self.__records:
+            if(not record.rota):
+                records.append(record) 
+        
+        return records
+    
+    def read_by_route(self, route_id: int):gh
+        for record in self.__records:
+            if(record.rota.id == route_id):
+                return record
 
     def list(self):
         return self.__records
