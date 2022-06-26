@@ -1,6 +1,3 @@
-from ctypes import pointer
-from dis import disco
-from operator import contains
 from controller.controllerCarga import ControllerCarga
 from dao.daoPercuso import DaoPercurso
 from dao.daoPonto import DaoPonto
@@ -93,52 +90,57 @@ class ControllerRota():
                     destinations = []
                     duration = []
                     origins = self.__dao_ponto.getOrigins()
-                    for value in values['select']:
-                        destinations.append(
-                            f'{value}, Florianópolis, Santa Catarina, Brasil')
-                    matrix = self.__api.request(origins.endereco, destinations)
+                    if values['select']:
+                        for value in values['select']:
+                            destinations.append(
+                                f'{value}, Florianópolis, Santa Catarina, Brasil')
+                        matrix = self.__api.request(
+                            origins.endereco, destinations)
 
-                    for row in matrix.get('rows'):
-                        for element in row.get('elements'):
-                            duration.append(element.get(
-                                'duration').get('text'))
+                        for row in matrix.get('rows'):
+                            for element in row.get('elements'):
+                                duration.append(element.get(
+                                    'duration').get('text'))
 
-                    duration = self.convertTimes(duration)
+                        duration = self.convertTimes(duration)
 
-                    dt = {}
-                    for i, address in enumerate(matrix.get('destination_addresses')):
-                        dt[address] = duration[i]
+                        dt = {}
+                        for i, address in enumerate(matrix.get('destination_addresses')):
+                            dt[address] = duration[i]
 
-                    dt = {key: value for key, value in sorted(
-                        dt.items(), key=lambda item: item[1])}
+                        dt = {key: value for key, value in sorted(
+                            dt.items(), key=lambda item: item[1])}
 
-                    if route:
-                        route.tempo_estimado = sum(dt.values())
-                        self.__dao_rota.update(route)
+                        if route:
+                            route.tempo_estimado = sum(dt.values())
+                            self.__dao_rota.update(route)
 
-                        roads = self.__dao_percurso.read_route_not_finish(
-                            route)
-                        for road in roads:
-                            self.__dao_percurso.delete(road)
-                    else:
-                        route = Rota(tempo_estimado=sum(dt.values()))
-                        self.__dao_rota.insert(route)
-
-                    spots = []
-                    spots.append(origins)
-                    for key, value in dt.items():
-                        spot = Ponto(endereco=key)
-                        if self.__dao_ponto.insert(spot):
-                            spots.append(spot)
-
-                    for cur, nxt in zip(spots, spots[1:] + ['end']):
-                        if nxt == 'end':
-                            break
+                            roads = self.__dao_percurso.read_route_not_finish(
+                                route)
+                            for road in roads:
+                                self.__dao_percurso.delete(road)
                         else:
-                            road = Percurso(pontoA=cur, pontoB=nxt, rota=route)
-                            self.__dao_percurso.insert(road)
+                            route = Rota(tempo_estimado=sum(dt.values()))
+                            self.__dao_rota.insert(route)
 
-                    self.edit(route)
+                        spots = []
+                        spots.append(origins)
+                        for key, value in dt.items():
+                            spot = Ponto(endereco=key)
+                            if self.__dao_ponto.insert(spot):
+                                spots.append(spot)
+
+                        for cur, nxt in zip(spots, spots[1:] + ['end']):
+                            if nxt == 'end':
+                                break
+                            else:
+                                road = Percurso(
+                                    pontoA=cur, pontoB=nxt, rota=route)
+                                self.__dao_percurso.insert(road)
+
+                        self.edit(route)
+                    else:
+                        break
 
     def convertTimes(self, array):
 
