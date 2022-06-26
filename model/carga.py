@@ -12,7 +12,7 @@ class Carga():
         self.__descricao = descricao
         self.__destinatario = destinatario
         self.__rota = rota
-        self.__status = 'Na transportadora'
+        self.__status = status
 
     @property
     def categoria(self):

@@ -25,7 +25,20 @@ class ControllerCarga():
                     self.finish()
 
     def insert(self):
-        pass
+        while True:
+            try:
+                button, values = self.__view.inicial()
+                if not self.__session.menu(button):
+                    if button == 'cancel':
+                        break
+                    elif button == 'save':
+                        carga = Carga(values['categoria'], values['altura'], values['largura'], values['comprimento'],
+                                            values['peso'], values['descricao'], values['cpf'], '123', 'Não alocada')
+                        self.__dao_carga.insert(carga)
+                        break
+            except Exception:
+                print(Exception)
+                self.__view.popUp()
 
     def update(self, carga: Carga):
         pass

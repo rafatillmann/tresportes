@@ -46,16 +46,37 @@ class ViewCarga(View):
 
     def inicial(self):
         info = [
-            [sg.Text('Criar nova carga', font=('Arial', 20, 'bold'))],
-            [sg.Text('Cargas', font=('Arial', 14, 'bold'))],
-            [sg.Text('Selecione as cargas dessa carga',
-                     font=('Arial', 10, 'bold'), key='msg'), self.button('Adicionar', 'add')],
-            [sg.Sizer(v_pixels=300)],
-
+            [sg.Text('Cadastro', font=('Arial', 20, 'bold'))],
         ]
 
-        layout = [[sg.Column(info)], [self.white_button('Descartar', 'cancel'),
-                                      self.button('Concluir', 'save', disableb=True)]]
+        layoutLoadForm = [
+            [sg.Text('Informações da carga', size=(30, 1))],
+            [sg.Text('Descrição', size=(20, 1))],
+            [sg.InputText(key='descricao')],
+            [sg.Text('Carga', size=(20, 1))],
+            [sg.InputText(key='categoria')],
+            [sg.Text('Peso', size=(20, 1))],
+            [sg.InputText(key='peso')],
+            [sg.Text('Largura', size=(20, 1))],
+            [sg.InputText(key='largura')],
+            [sg.Text('Altura', size=(20, 1))],
+            [sg.InputText(key='altura')],
+            [sg.Text('Comprimento', size=(20, 1))],
+            [sg.InputText(key='comprimento')],
+        ]
+
+        layoutReceiverForm = [
+            [sg.Text('Informações do destinatário', size=(30, 1))],
+            [sg.Text('CPF/CNPJ', size=(20, 1))],
+            [sg.InputText(key='cpf')],
+            [sg.Text('Nome', size=(20, 1))],
+            [sg.InputText(key='nome')],
+            [sg.Text('Endereço', size=(20, 1))],
+            [sg.InputText(key='endereco')],
+        ]
+
+        layout = [[sg.Column(info)], [sg.Column(layoutLoadForm), sg.Column(layoutReceiverForm)], [self.white_button('Descartar', 'cancel'),
+                                      self.button('Concluir', 'save', disableb=False)]]
 
         window = self.window(layout)
 
