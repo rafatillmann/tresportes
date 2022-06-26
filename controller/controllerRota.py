@@ -52,8 +52,9 @@ class ControllerRota():
                 self.__view.popUp()
 
     def edit(self, route):
+        roads = self.__dao_percurso.read_route_not_finish(route)
         while True:
-            button, values = self.__view.edit(route)
+            button, values = self.__view.edit(route, roads)
             if not self.__session.menu(button):
                 if button == 'cancel':
                     break
@@ -63,8 +64,9 @@ class ControllerRota():
                     self.options()
 
     def view(self, route):
+        roads = self.__dao_percurso.read_route_not_finish(route)
         while True:
-            button, values = self.__view.view(route)
+            button, values = self.__view.view(route, roads)
             if not self.__session.menu(button):
                 if button == 'back':
                     break

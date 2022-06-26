@@ -66,8 +66,8 @@ class ViewRota(View):
 
         return button, values
 
-    def edit(self, route):
-        road = self.road()
+    def edit(self, route, roads):
+        road = self.road(roads)
         loads = [1, 2, 3, 4]
         loads = self.loads(loads)
         layout = [[sg.Text('Revisão', font=('Arial', 20, 'bold'))],
@@ -86,8 +86,8 @@ class ViewRota(View):
 
         return button, values
 
-    def view(self, route):
-        road = self.road()
+    def view(self, route, roads):
+        road = self.road(roads)
         loads = [1, 2, 3, 4]
         loads = self.loads(loads, view=True)
         layout = [[sg.Text(f'Rota {route.id}', font=('Arial', 20, 'bold'))],
@@ -188,20 +188,32 @@ class ViewRota(View):
 
                 ]
 
-    def road(self):
-        info = [[sg.Sizer(500)],
-                [sg.Text('dfdfdfdfdfd', font=('Arial', 10, 'bold'),
-                         background_color='#D9D9D9')],
-                [sg.Image(source='./assets/points.png',
-                          background_color='#D9D9D9')],
-                [sg.Text('fsfsfsdfsfsdfs', font=('Arial', 10, 'bold'),
-                         background_color='#D9D9D9')]]
+    def road(self, roads):
+        if roads:
+            road = roads[0]
+            info = [[sg.Sizer(500)],
+                    [sg.Text(road.pontoA.endereco, font=('Arial', 10, 'bold'),
+                             background_color='#D9D9D9')],
+                    [sg.Image(source='./assets/points.png',
+                              background_color='#D9D9D9')],
+                    [sg.Text(road.pontoB.endereco, font=('Arial', 10, 'bold'),
+                             background_color='#D9D9D9')]]
 
-        card = [
-            [sg.Text('Percurso', font=('Arial', 14, 'bold'))], [
-                sg.Column(info, background_color='#D9D9D9', element_justification=CENTER)]]
+            card = [
+                [sg.Text('Percurso', font=('Arial', 14, 'bold'))], [
+                    sg.Column(info, background_color='#D9D9D9', element_justification=CENTER)]]
 
-        return card
+            return card
+        else:
+            info = [[sg.Sizer(500)],
+                    [sg.Text('Nenhum percuso em andamento, rota finalizada', font=('Arial', 10, 'bold'),
+                             background_color='#D9D9D9'), sg.Sizer(v_pixels=100)]]
+
+            card = [
+                [sg.Text('Percurso', font=('Arial', 14, 'bold'))], [
+                    sg.Column(info, background_color='#D9D9D9', element_justification=CENTER)]]
+
+            return card
 
     def loads(self, list, view=False):
         cards = []

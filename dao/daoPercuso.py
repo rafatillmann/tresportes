@@ -1,3 +1,5 @@
+
+
 from sqlite3 import OperationalError
 from dao.abstractDao import AbstractDao
 from dao.daoPonto import DaoPonto
@@ -68,6 +70,13 @@ class DaoPercurso(AbstractDao):
         for record in self.__records:
             if(record.id == id):
                 return record
+
+    def read_route_not_finish(self, route):
+        result = []
+        for record in self.__records:
+            if record.rota == route and not record.fim:
+                result.append(record)
+        return result
 
     def list(self):
         return self.__records
