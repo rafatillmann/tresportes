@@ -114,7 +114,17 @@ class ViewRota(View):
 
         window = self.window(layout)
 
-        button, values = window.read()
+        while True:
+            button, values = window.read()
+
+            if button == 'sel':
+                if values['select']:
+                    break
+                else:
+                    self.popUp(
+                        'Nenhuma carga adicionada, para concluir a operação selecione alguma carga')
+            else:
+                break
 
         window.close()
 
