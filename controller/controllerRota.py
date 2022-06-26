@@ -50,7 +50,12 @@ class ControllerRota():
         while True:
             button, values = self.__view.edit(route)
             if not self.__session.menu(button):
-                pass
+                if button == 'cancel':
+                    break
+                elif button == 'edit':
+                    self.add()
+                elif button == 'save':
+                    pass
 
     def finish(self):
         while True:

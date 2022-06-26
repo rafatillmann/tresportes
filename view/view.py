@@ -59,11 +59,11 @@ class View(ABC):
 
     def list(self, list):
         return sg.Listbox(list, expand_x=True, font=(12),
-                          expand_y=True, size=(None, 20), key='select')
+                          expand_y=True, size=(None, 20), key='select', sbar_relief='solid')
 
     def multiple_list(self, list):
         return sg.Listbox(list, expand_x=True, font=(12),
-                          expand_y=True, size=(None, 20), key='select', select_mode='multiple')
+                          expand_y=True, size=(None, 20), key='select', select_mode='multiple', sbar_relief='solid')
 
     def button(self, text, key, disableb=None, tooltip=None):
         return sg.Button(text, key=key, font=(
