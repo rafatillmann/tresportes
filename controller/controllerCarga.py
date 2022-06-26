@@ -1,5 +1,5 @@
 from util.utils import cpf_validate, email_validate, generate_random_password
-from view.viewCadastroCarga import ViewCadastroCarga
+from view.viewCarga import ViewCarga
 from dao.daoCarga import DaoCarga
 from model.carga import Carga
 
@@ -8,11 +8,21 @@ class ControllerCarga():
 
     def __init__(self, session):
         self.__dao_carga = DaoCarga
-        self.__view = ViewCadastroCarga()
+        self.__view = ViewCarga()
         self.__session = session
 
     def options(self):
-        pass
+        while True:
+            list = self.__dao_carga.list()
+            button, values = self.__view.options(list)
+            if not self.__session.menu(button):
+                if button == 'insert':
+                    self.insert()
+                elif 'edit' in button:
+                    route = self.__dao_carga.read(int(button.split(':')[1]))
+                    self.edit(route)
+                elif button == 'finish':
+                    self.finish()
 
     def insert(self):
         pass

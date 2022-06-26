@@ -1,5 +1,6 @@
 from controller.controllerMotorista import ControllerMotorista
 from controller.controllerRota import ControllerRota
+from controller.controllerCarga import ControllerCarga
 
 
 class ControllerSession():
@@ -7,6 +8,7 @@ class ControllerSession():
     def __init__(self):
         self.__controller_motorista = ControllerMotorista(self)
         self.__controller_rota = ControllerRota(self)
+        self.__controller_carga = ControllerCarga(self)
 
     def menu(self, button):
 
@@ -17,7 +19,7 @@ class ControllerSession():
         elif button == 'driver':
             self.__controller_motorista.options()
         elif button == 'load':
-            pass
+            self.__controller_carga.options()
         else:
             return False
 

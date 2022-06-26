@@ -73,7 +73,7 @@ class DaoCarga(AbstractDao):
         
         return records
     
-    def read_by_route(self, route_id: int):gh
+    def read_by_route(self, route_id: int):
         for record in self.__records:
             if(record.rota.id == route_id):
                 return record
