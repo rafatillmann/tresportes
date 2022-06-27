@@ -44,13 +44,34 @@ class ControllerRota():
                     if button == 'cancel':
                         break
                     elif button == 'add':
-                        self.add()
+                        route = self.add()
+                        self.review(route)
+                        break
             except Exception:
                 self.__view.popUp()
 
-    def edit(self, route):
-        roads = self.__dao_percurso.read_route_not_finish(route)
+    def review(self, route):
         while True:
+            roads = self.__dao_percurso.read_route_not_finish(route)
+            # loads = self.__controller_carga.read_by_route()
+            button, values = self.__view.edit(route, roads)
+            if not self.__session.menu(button):
+                if button == 'cancel':
+                    roads = self.__dao_percurso.read_route_not_finish(
+                        route)
+                    for road in roads:
+                        self.__dao_percurso.delete(road)
+                    self.__dao_rota.delete(route)
+                    break
+                elif button == 'edit':
+                    self.add(route)
+                elif button == 'save':
+                    self.options()
+
+    def edit(self, route):
+        while True:
+            roads = self.__dao_percurso.read_route_not_finish(route)
+            # loads = self.__controller_carga.read_by_route()
             button, values = self.__view.edit(route, roads)
             if not self.__session.menu(button):
                 if button == 'cancel':
@@ -61,8 +82,9 @@ class ControllerRota():
                     self.options()
 
     def view(self, route):
-        roads = self.__dao_percurso.read_route_not_finish(route)
         while True:
+            roads = self.__dao_percurso.read_route_not_finish(route)
+            # loads = self.__controller_carga.read_by_route()
             button, values = self.__view.view(route, roads)
             if not self.__session.menu(button):
                 if button == 'back':
@@ -137,8 +159,7 @@ class ControllerRota():
                                 road = Percurso(
                                     pontoA=cur, pontoB=nxt, rota=route)
                                 self.__dao_percurso.insert(road)
-
-                        self.edit(route)
+                        return route
                     else:
                         break
 

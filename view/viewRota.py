@@ -55,8 +55,7 @@ class ViewRota(View):
 
         ]
 
-        layout = [[sg.Column(info)], [self.white_button('Descartar', 'cancel'),
-                                      self.button('Concluir', 'save', disableb=True)]]
+        layout = [[sg.Column(info)], [self.white_button('Voltar', 'cancel')]]
 
         window = self.window(layout)
 
