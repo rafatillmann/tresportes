@@ -67,7 +67,7 @@ class ControllerRota():
                     self.__dao_rota.delete(route)
                     break
                 elif button == 'edit':
-                    self.add(route)
+                    self.add(route, loads)
                 elif button == 'save':
                     self.options()
 
@@ -80,7 +80,7 @@ class ControllerRota():
                 if button == 'cancel':
                     break
                 elif button == 'edit':
-                    self.add(route)
+                    self.add(route, loads)
                 elif button == 'save':
                     self.options()
 
@@ -103,9 +103,12 @@ class ControllerRota():
                 elif button == 'finish':
                     self.finish()
 
-    def add(self, route=None):
+    def add(self, route=None, loads=None):
         while True:
             list = self.__controller_carga.read_unused()
+            if loads:
+                for load in loads:
+                    list.append(load)
             button, values = self.__view.select_load(list)
             if not self.__session.menu(button):
                 if button == 'back':

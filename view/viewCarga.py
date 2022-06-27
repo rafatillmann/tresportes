@@ -53,7 +53,7 @@ class ViewCarga(View):
             [sg.Text('Informações da carga', size=(30, 1))],
             [sg.Text('Descrição', size=(20, 1))],
             [sg.InputText(key='descricao')],
-            [sg.Text('Carga', size=(20, 1))],
+            [sg.Text('Categoria', size=(20, 1))],
             [sg.InputText(key='categoria')],
             [sg.Text('Peso', size=(20, 1))],
             [sg.InputText(key='peso')],
@@ -76,7 +76,7 @@ class ViewCarga(View):
         ]
 
         layout = [[sg.Column(info)], [sg.Column(layoutLoadForm), sg.Column(layoutReceiverForm)], [self.white_button('Descartar', 'cancel'),
-                                      self.button('Concluir', 'save', disableb=False)]]
+                                                                                                  self.button('Concluir', 'save', disableb=False)]]
 
         window = self.window(layout)
 
@@ -118,7 +118,7 @@ class ViewCarga(View):
         ]
 
         layout = [[sg.Column(info)], [sg.Column(layoutLoadForm), sg.Column(layoutReceiverForm)], [self.white_button('Descartar', 'cancel'),
-                                      self.button('Concluir', 'save', disableb=False)]]
+                                                                                                  self.button('Concluir', 'save', disableb=False)]]
 
         window = self.window(layout)
 
@@ -127,20 +127,22 @@ class ViewCarga(View):
         window.close()
 
         return button, values
- 
+
     # ---------- components ------------
 
     def cards(self, list):
         cards = []
         for item in list:
-            info = [[sg.Text(f'{item.descricao}', font=('Arial', 12, 'bold'), background_color='#D9D9D9')]]
+            info = [[sg.Sizer(250)],
+                    [sg.Text(f'{item.descricao}', font=(
+                        'Arial', 11, 'bold'), background_color='#D9D9D9')]]
             buttons = [[self.button('Editar', f'edit:{item.id}')]]
 
             card = [[sg.Column(info, background_color='#D9D9D9', pad=((0, 100), (0, 0))), sg.Column(
                 buttons, vertical_alignment=BOTTOM, background_color='#D9D9D9')]]
 
             cards.append(
-                [sg.Column(card, background_color='#D9D9D9', justification=CENTER, pad=((0, 5), (0, 10)), )])
+                [sg.Column(card, background_color='#D9D9D9', justification=CENTER, pad=((0, 5), (0, 10)))])
 
         return cards
 
@@ -150,7 +152,7 @@ class ViewCarga(View):
 
         return [[sg.Text('Cargas', font=('Arial', 20, 'bold'))],
                 [sg.Button('Criar nova carga', key='insert', font=('Arial', 10, 'bold')), sg.Button('Pesquisar', key='search', font=(
-                    'Arial', 10, 'bold')), sg.Button('Visualizar finalizadas', key='finish', font=('Arial', 10, 'bold'))],
+                    'Arial', 10, 'bold'))],
                 [sg.Input(size=(20, 5), key='input', expand_x=True)],
                 [sg.Column(cards, scrollable=True,
                            vertical_scroll_only=True, size=(None, 400), key='select')]

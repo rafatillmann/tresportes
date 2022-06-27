@@ -1,7 +1,9 @@
-from util.utils import cpf_validate, email_validate, generate_random_password
-from view.viewCarga import ViewCarga
 from dao.daoCarga import DaoCarga
 from dao.daoCategoria import DaoCategoria
+from model.destinatario import Destinatario
+from util.utils import cpf_validate, email_validate, generate_random_password
+from view.viewCarga import ViewCarga
+
 from dao.daoDestinatario import DaoDestinatario
 from model.carga import Carga
 
@@ -34,10 +36,13 @@ class ControllerCarga():
                     if button == 'cancel':
                         break
                     elif button == 'save':
-                        destinatario = self.__dao_destinatario.read(
-                            values['cpf'])
-                        carga = Carga(values['categoria'], values['altura'], values['largura'], values['comprimento'],
-                                      values['peso'], values['descricao'], values['cpf'], '123', 'Não alocada')
+                        destinatario = self.__dao_destinatario.readByCPF(
+                            int(values['cpf']))
+                        categoria = self.__dao_categoria.read_by_name(
+                            values['categoria'])
+
+                        carga = Carga(categoria, values['altura'], values['largura'], values['comprimento'],
+                                      values['peso'], values['descricao'], destinatario, None, 'Não alocada')
                         self.__dao_carga.insert(carga)
                         break
             except Exception:
@@ -67,8 +72,8 @@ class ControllerCarga():
     def read_unused(self):
         return self.__dao_carga.read_unused()
 
-    def read_by_route(self, route_id):
-        return self.__dao_carga.read_by_route(route_id)
+    def read_by_route(self, route):
+        return self.__dao_carga.read_by_route(route)
 
     def update_carga(self, carga: Carga):
         return self.__dao_carga.update(carga)

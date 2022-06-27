@@ -29,7 +29,7 @@ class DaoCarga(AbstractDao):
     def insert(self, carga: Carga):
         fields = 'categoria, altura, largura, comprimento, peso, descricao, destinatario, rota, status'
         values = (carga.categoria.id, carga.altura, carga.largura, carga.comprimento,
-                  carga.peso, carga.descricao, carga.destinatario.id, carga.rota.id, carga.status)
+                  carga.peso, carga.descricao, carga.destinatario.id, carga.rota.id if carga.rota else None, carga.status)
         try:
             self.__database.cursor.execute(
                 f'INSERT INTO {self.__table_name} ({fields}) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)', values)
@@ -45,7 +45,7 @@ class DaoCarga(AbstractDao):
     def update(self, carga: Carga):
         fields = f'categoria = ?, altura = ?, largura = ?, comprimento = ?, peso = ?, descricao = ?, destinatario = ?, rota = ?, status = ?'
         values = (carga.categoria.id, carga.altura, carga.largura, carga.comprimento,
-                  carga.peso, carga.descricao, carga.destinatario.id, carga.rota.id, carga.status)
+                  carga.peso, carga.descricao, carga.destinatario.id, carga.rota.id if carga.rota else None, carga.status)
 
         try:
             self.__database.cursor.execute(

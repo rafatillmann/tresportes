@@ -65,6 +65,11 @@ class DaoCategoria(AbstractDao):
             if(record.id == id):
                 return record
 
+    def read_by_name(self, nome: str):
+        for record in self.__records:
+            if record.nome == nome:
+                return record
+
     def list(self):
         return self.__records
 
