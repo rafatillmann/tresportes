@@ -41,8 +41,8 @@ class ControllerCarga():
                         categoria = self.__dao_categoria.read_by_name(
                             values['categoria'])
 
-                        carga = Carga(categoria, values['altura'], values['largura'], values['comprimento'],
-                                      values['peso'], values['descricao'], destinatario, None, 'Não alocada')
+                        carga = Carga(categoria, float(values['altura']), float(values['largura']), float(values['comprimento']),
+                                      float(values['peso']), values['descricao'], destinatario, None, 'Não alocada')
                         self.__dao_carga.insert(carga)
                         break
             except Exception:

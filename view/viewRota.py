@@ -167,8 +167,6 @@ class ViewRota(View):
         cards = []
         for item in list:
             info = [[sg.Text(f'Rota {item.id}', font=('Arial', 12, 'bold'), background_color='#D9D9D9')],
-                    [sg.Text('Entregas', font=('Arial', 10, 'bold'),
-                             background_color='#D9D9D9')],
                     [sg.Text('Nenhum motorista alocado', font=('Arial', 10, 'bold'),
                              background_color='#D9D9D9')]]
             buttons = [[self.button('Editar', f'edit:{item.id}') if not finish else None,

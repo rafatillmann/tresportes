@@ -30,6 +30,7 @@ class DaoCarga(AbstractDao):
         fields = 'categoria, altura, largura, comprimento, peso, descricao, destinatario, rota, status'
         values = (carga.categoria.id, carga.altura, carga.largura, carga.comprimento,
                   carga.peso, carga.descricao, carga.destinatario.id, carga.rota.id if carga.rota else None, carga.status)
+        print(values)
         try:
             self.__database.cursor.execute(
                 f'INSERT INTO {self.__table_name} ({fields}) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)', values)
