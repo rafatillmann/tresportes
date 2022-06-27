@@ -45,16 +45,19 @@ class ControllerRota():
                         break
                     elif button == 'add':
                         route = self.add()
-                        self.review(route)
-                        break
+                        if route:
+                            self.review(route)
+                            break
+                        else:
+                            pass
             except Exception:
                 self.__view.popUp()
 
     def review(self, route):
         while True:
             roads = self.__dao_percurso.read_route_not_finish(route)
-            # loads = self.__controller_carga.read_by_route()
-            button, values = self.__view.edit(route, roads)
+            loads = self.__controller_carga.read_by_route(route)
+            button, values = self.__view.edit(route, roads, loads)
             if not self.__session.menu(button):
                 if button == 'cancel':
                     roads = self.__dao_percurso.read_route_not_finish(
@@ -71,8 +74,8 @@ class ControllerRota():
     def edit(self, route):
         while True:
             roads = self.__dao_percurso.read_route_not_finish(route)
-            # loads = self.__controller_carga.read_by_route()
-            button, values = self.__view.edit(route, roads)
+            loads = self.__controller_carga.read_by_route(route)
+            button, values = self.__view.edit(route, roads, loads)
             if not self.__session.menu(button):
                 if button == 'cancel':
                     break
@@ -84,8 +87,8 @@ class ControllerRota():
     def view(self, route):
         while True:
             roads = self.__dao_percurso.read_route_not_finish(route)
-            # loads = self.__controller_carga.read_by_route()
-            button, values = self.__view.view(route, roads)
+            loads = self.__controller_carga.read_by_route(route)
+            button, values = self.__view.view(route, roads, loads)
             if not self.__session.menu(button):
                 if button == 'back':
                     break
@@ -103,8 +106,7 @@ class ControllerRota():
     def add(self, route=None):
         while True:
             list = self.__controller_carga.read_unused()
-            button, values = self.__view.select_load(
-                ['R. Alipia Santana Martins', 'R. Delfino Conti'])
+            button, values = self.__view.select_load(list)
             if not self.__session.menu(button):
                 if button == 'back':
                     break
@@ -115,7 +117,7 @@ class ControllerRota():
                     if values['select']:
                         for value in values['select']:
                             destinations.append(
-                                f'{value}, Florianópolis, Santa Catarina, Brasil')
+                                f'{value.destinatario.endereco}, Florianópolis, Santa Catarina, Brasil')
                         matrix = self.__api.request(
                             origins.endereco, destinations)
 
@@ -144,6 +146,10 @@ class ControllerRota():
                         else:
                             route = Rota(tempo_estimado=sum(dt.values()))
                             self.__dao_rota.insert(route)
+
+                        for value in values['select']:
+                            value.rota = route
+                            self.__controller_carga.update_carga(value)
 
                         spots = []
                         spots.append(origins)

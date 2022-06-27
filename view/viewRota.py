@@ -65,9 +65,8 @@ class ViewRota(View):
 
         return button, values
 
-    def edit(self, route, roads):
+    def edit(self, route, roads, loads):
         road = self.road(roads)
-        loads = [1, 2, 3, 4]
         loads = self.loads(loads)
         layout = [[sg.Text('Revisão', font=('Arial', 20, 'bold'))],
                   [sg.Column(road, vertical_alignment=TOP),
@@ -85,9 +84,8 @@ class ViewRota(View):
 
         return button, values
 
-    def view(self, route, roads):
+    def view(self, route, roads, loads):
         road = self.road(roads)
-        loads = [1, 2, 3, 4]
         loads = self.loads(loads, view=True)
         layout = [[sg.Text(f'Rota {route.id}', font=('Arial', 20, 'bold'))],
                   [sg.Column(road, vertical_alignment=TOP),
@@ -228,8 +226,8 @@ class ViewRota(View):
         cards = []
         for item in list:
             info = [[sg.Sizer(500)],
-                    [sg.Text(f'kjddjksdj', font=('Arial', 10, 'bold'), background_color='#D9D9D9'), sg.Text(
-                        f'kjddkskdsksskskjksdj', font=('Arial', 10, 'bold'), background_color='#D9D9D9')],
+                    [sg.Text(item, font=('Arial', 10, 'bold'),
+                             background_color='#D9D9D9')],
                     ]
 
             cards.append(
@@ -237,7 +235,7 @@ class ViewRota(View):
 
         loads = [[sg.Text('Cargas', font=('Arial', 14, 'bold'))],
                  [sg.Column(cards, scrollable=True, vertical_scroll_only=True,
-                            sbar_arrow_width=5, sbar_width=5, sbar_relief='solid')],
+                            sbar_arrow_width=5, sbar_width=5, sbar_relief='solid', size=(None, 100))],
                  [self.white_button('Editar', 'edit') if not view else sg.Text('')]]
 
         return loads

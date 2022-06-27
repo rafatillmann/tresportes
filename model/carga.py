@@ -4,7 +4,7 @@ from model.rota import Rota
 
 
 class Carga():
-    def __init__(self, categoria: Categoria, altura: float, largura: float, comprimento: float, peso: float, descricao: str, destinatario: Destinatario, rota: Rota, status: str):
+    def __init__(self, categoria: Categoria = None, altura: float = None, largura: float = None, comprimento: float = None, peso: float = None, descricao: str = None, destinatario: Destinatario = None, rota: Rota = None, status: str = None):
         self.__categoria = categoria
         self.__altura = altura
         self.__largura = largura
@@ -88,4 +88,4 @@ class Carga():
         self.__status = status
 
     def __str__(self):
-        return f'{self.__destinatario.endereco}'
+        return f'{self.__descricao} - {self.__destinatario.endereco}'

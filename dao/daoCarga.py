@@ -1,8 +1,11 @@
 from sqlite3 import OperationalError
 from dao.abstractDao import AbstractDao
+from dao.daoCategoria import DaoCategoria
 from dao.daoDestinatario import DaoDestinatario
+from dao.daoRota import DaoRota
 from database.db import DB
 from model.carga import Carga
+from model.rota import Rota
 
 
 class DaoCarga(AbstractDao):
@@ -11,6 +14,8 @@ class DaoCarga(AbstractDao):
         self.__table_name = 'carga'
         self.__records = []
         self.__dao_destinatario = DaoDestinatario
+        self.__dao_rota = DaoRota
+        self.__dao_categoria = DaoCategoria
 
         try:
             fields = 'id integer NOT NULL, categoria integer, altura REAL NOT NULL, largura REAL NOT NULL, comprimento REAL NOT NULL, peso REAL NOT NULL, descricao varchar(255) NOT NULL, destinatario integer NOT NULL, rota integer, status varchar(255), PRIMARY KEY(id AUTOINCREMENT)'
@@ -23,10 +28,11 @@ class DaoCarga(AbstractDao):
 
     def insert(self, carga: Carga):
         fields = 'categoria, altura, largura, comprimento, peso, descricao, destinatario, rota, status'
-        values = f'"{carga.categoria}", "{carga.altura}", "{carga.largura}", "{carga.comprimento}", "{carga.peso}", "{carga.descricao}", "{carga.destinatario}", "{carga.rota}", "{carga.status}"'
+        values = (carga.categoria.id, carga.altura, carga.largura, carga.comprimento,
+                  carga.peso, carga.descricao, carga.destinatario.id, carga.rota.id, carga.status)
         try:
             self.__database.cursor.execute(
-                f'INSERT INTO {self.__table_name} ({fields}) VALUES({values})')
+                f'INSERT INTO {self.__table_name} ({fields}) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)', values)
             self.__database.connection.commit()
 
             carga.id = self.__database.cursor.lastrowid
@@ -37,11 +43,13 @@ class DaoCarga(AbstractDao):
             return False
 
     def update(self, carga: Carga):
-        fields = f'categoria = "{carga.categoria}", altura = "{carga.altura}", largura = "{carga.largura}", comprimento = "{carga.comprimento}", peso = "{carga.peso}", descricao = "{carga.descricao}", destinatario = "{carga.destinatario}", rota = "{carga.rota}", status = "{carga.status}"'
+        fields = f'categoria = ?, altura = ?, largura = ?, comprimento = ?, peso = ?, descricao = ?, destinatario = ?, rota = ?, status = ?'
+        values = (carga.categoria.id, carga.altura, carga.largura, carga.comprimento,
+                  carga.peso, carga.descricao, carga.destinatario.id, carga.rota.id, carga.status)
 
         try:
             self.__database.cursor.execute(
-                f'UPDATE {self.__table_name} SET {fields} WHERE id = {carga.id}')
+                f'UPDATE {self.__table_name} SET {fields} WHERE id = {carga.id}', values)
             self.__database.connection.commit()
             return True
         except OperationalError as error:
@@ -70,15 +78,17 @@ class DaoCarga(AbstractDao):
     def read_unused(self):
         records = []
         for record in self.__records:
-            if(not record.rota):
+            if not record.rota:
                 records.append(record)
 
         return records
 
-    def read_by_route(self, route_id: int):
+    def read_by_route(self, route: Rota):
+        result = []
         for record in self.__records:
-            if(record.rota == route_id):
-                return record
+            if record.rota == route:
+                result.append(record)
+        return result
 
     def list(self):
         return self.__records
@@ -88,8 +98,11 @@ class DaoCarga(AbstractDao):
             f'SELECT * FROM {self.__table_name}').fetchall()
 
         for record in records:
-            object = Carga(record[1], record[2], record[3], record[4],
-                           record[5], record[6], record[7], record[8], record[9])
+            categoria = self.__dao_categoria.read(record[1])
+            destinatario = self.__dao_destinatario.read(record[7])
+            rota = self.__dao_rota.read(record[8])
+            object = Carga(categoria, record[2], record[3], record[4],
+                           record[5], record[6], destinatario, rota, record[9])
             object.id = record[0]
             self.__records.append(object)
 

@@ -34,9 +34,10 @@ class ControllerCarga():
                     if button == 'cancel':
                         break
                     elif button == 'save':
-                        destinatario = self.__dao_destinatario.read(values['cpf'])
+                        destinatario = self.__dao_destinatario.read(
+                            values['cpf'])
                         carga = Carga(values['categoria'], values['altura'], values['largura'], values['comprimento'],
-                                            values['peso'], values['descricao'], values['cpf'], '123', 'Não alocada')
+                                      values['peso'], values['descricao'], values['cpf'], '123', 'Não alocada')
                         self.__dao_carga.insert(carga)
                         break
             except Exception:
@@ -68,3 +69,6 @@ class ControllerCarga():
 
     def read_by_route(self, route_id):
         return self.__dao_carga.read_by_route(route_id)
+
+    def update_carga(self, carga: Carga):
+        return self.__dao_carga.update(carga)
