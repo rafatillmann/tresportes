@@ -29,7 +29,8 @@ class ControllerSession():
             self.__controller_rota.options()
 
     def session_driver(self):
-        pass
+        while True:
+            self.__controller_rota.options()
 
     def session_receiver(self):
         pass

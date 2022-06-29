@@ -6,7 +6,9 @@ from model.google import API
 from model.percurso import Percurso
 from model.ponto import Ponto
 from model.rota import Rota
+from util.session import Session
 from view.viewRota import ViewRota
+from view.viewMotorista import ViewMotorista
 
 
 class ControllerRota():
@@ -19,22 +21,33 @@ class ControllerRota():
         self.__dao_percurso = DaoPercurso
         self.__api = API
         self.__controller_carga = ControllerCarga(session)
+        self.__view_motorista = ViewMotorista()
 
     def options(self):
         while True:
-            list = self.__dao_rota.list()
-            button, values = self.__view.options(list)
-            if not self.__session.menu(button):
-                if button == 'insert':
-                    self.insert()
-                elif 'edit' in button:
-                    route = self.__dao_rota.read(int(button.split(':')[1]))
-                    self.edit(route)
-                elif 'view' in button:
-                    route = self.__dao_rota.read(int(button.split(':')[1]))
-                    self.view(route)
-                elif button == 'finish':
-                    self.finish()
+            if Session.type == 'Motorista':
+                list = self.__dao_rota.list_by_motorista(Session.user)
+                button, values = self.__view_motorista.options(list)                
+                if not self.__session.menu(button):
+                    if 'view' in button:
+                        route = self.__dao_rota.read(int(button.split(':')[1]))
+                        self.view(route)
+                    elif button == 'finish':
+                        self.finish()
+            elif Session.type == 'Gerente':
+                list = self.__dao_rota.list()            
+                button, values = self.__view.options(list)
+                if not self.__session.menu(button):
+                    if button == 'insert':
+                        self.insert()
+                    elif 'edit' in button:
+                        route = self.__dao_rota.read(int(button.split(':')[1]))
+                        self.edit(route)
+                    elif 'view' in button:
+                        route = self.__dao_rota.read(int(button.split(':')[1]))
+                        self.view(route)
+                    elif button == 'finish':
+                        self.finish()               
 
     def insert(self):
         while True:
@@ -84,24 +97,35 @@ class ControllerRota():
                 elif button == 'save':
                     self.options()
 
-    def view(self, route):
+    def view(self, route):               
         while True:
-            roads = self.__dao_percurso.read_route_not_finish(route)
-            loads = self.__controller_carga.read_by_route(route)
-            button, values = self.__view.view(route, roads, loads)
-            if not self.__session.menu(button):
-                if button == 'back':
-                    break
+            if Session.type == 'Gerente':
+                roads = self.__dao_percurso.read_route_not_finish(route)
+                loads = self.__controller_carga.read_by_route(route)
+                button, values = self.__view.view(route, roads, loads)
+                if not self.__session.menu(button):
+                    if button == 'back':
+                        break
+            elif Session.type == 'Motorista':
+                roads = self.__dao_percurso.read_route_not_finish(route)
+                loads = self.__controller_carga.read_by_route(route)
+                button, values = self.__view_motorista.view(route,roads, loads)
+                if not self.__session.menu(button):
+                    if button == 'back':
+                        break
 
     def finish(self):
         while True:
-            list = self.__dao_rota.deleted()
-            button, values = self.__view.finish(list)
-            if not self.__session.menu(button):
-                if button == 'insert':
-                    self.insert()
-                elif button == 'finish':
-                    self.finish()
+            if Session.type == 'Gerente':
+                list = self.__dao_rota.deleted()
+                button, values = self.__view.finish(list)
+                if not self.__session.menu(button):
+                    if button == 'insert':
+                        self.insert()
+                    elif button == 'finish':
+                        self.finish()
+            elif Session.type == 'Motorista':
+                pass
 
     def add(self, route=None, loads=None):
         while True:

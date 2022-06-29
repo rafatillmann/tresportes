@@ -9,5 +9,10 @@ class Session():
     def type(self, type: int):
         self.__type = type
 
+    @property
+    def user(self):
+        return self.__user
 
-Session = Session()
+    @user.setter
+    def user(self, user):
+        self.__user = user

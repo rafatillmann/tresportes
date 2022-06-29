@@ -26,6 +26,7 @@ class ControllerUsuario():
             if(user):
                 if(user.senha == senha):
                     Session.type = type
+                    Session.user = user
                     return True
 
             return False

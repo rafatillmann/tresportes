@@ -76,6 +76,13 @@ class DaoRota(AbstractDao):
 
     def list(self):
         return self.__records
+    
+    def list_by_motorista(self, motorista: Motorista):
+        result = []
+        for record in self.__records:
+            if(record.motorista == motorista):
+                result.append(record)
+        return result
 
     def deleted(self):
         return self.__deleted

@@ -32,7 +32,7 @@ class Login():
 
     def app(self, email: str = None):
         if Session.type == 'Motorista':
-            pass
+            self.__controller_session.session_driver()
         elif Session.type == 'Gerente':
             self.__controller_session.session_manager()
         elif Session.type == 'Destinatario':
@@ -40,3 +40,5 @@ class Login():
                 ControllerDestinatario().update(email)
         else:
             pass
+        
+    
