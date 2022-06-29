@@ -81,6 +81,8 @@ class ControllerRota():
                     break
                 elif button == 'edit':
                     self.add(route, loads)
+                elif button == 'allocation':
+                    pass
                 elif button == 'save':
                     self.options()
 
@@ -94,6 +96,8 @@ class ControllerRota():
                     break
                 elif button == 'edit':
                     self.add(route, loads)
+                elif button == 'allocation':
+                    pass
                 elif button == 'save':
                     self.options()
 
