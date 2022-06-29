@@ -69,6 +69,7 @@ class ViewRota(View):
         road = self.road(roads)
         loads = self.loads(loads)
         layout = [[sg.Text('Revisão', font=('Arial', 20, 'bold'))],
+                  [self.button('Alocar', 'allocation')],                  
                   [sg.Column(road, vertical_alignment=TOP),
                    sg.Column(loads, vertical_alignment=TOP)],
                   [sg.Sizer(v_pixels=80)],
@@ -160,6 +161,33 @@ class ViewRota(View):
         window.close()
 
         return button, values
+    
+    def allocDriver(self, list):
+        layout = [[sg.Text('Selecione o motorista', font=('Arial', 20, 'bold'))],
+                  [self.list(list)],
+                  [self.white_button('Voltar', 'back'), self.button(
+                      'Selecionar', 'sel')]
+                  ]
+
+        window = self.window(layout)
+
+        while True:
+            button, values = window.read()
+
+            if button == 'sel':
+                if values['select']:
+                    break
+                else:
+                    self.popUp(
+                        'Nenhuma carga adicionada, para concluir a operação selecione alguma carga')
+            else:
+                break
+
+        window.close()
+
+        return button, values
+        
+        
 
     # ---------- components ------------
 

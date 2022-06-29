@@ -2,6 +2,7 @@ from controller.controllerCarga import ControllerCarga
 from dao.daoPercuso import DaoPercurso
 from dao.daoPonto import DaoPonto
 from dao.daoRota import DaoRota
+from dao.daoMotorista import DaoMotorista
 from model.google import API
 from model.percurso import Percurso
 from model.ponto import Ponto
@@ -22,7 +23,8 @@ class ControllerRota():
         self.__api = API
         self.__controller_carga = ControllerCarga(session)
         self.__view_motorista = ViewMotorista()
-
+        self.__dao_motorista = DaoMotorista
+        
     def options(self):
         while True:
             if Session.type == 'Motorista':
@@ -97,7 +99,7 @@ class ControllerRota():
                 elif button == 'edit':
                     self.add(route, loads)
                 elif button == 'allocation':
-                    pass
+                    self.allocDriver(route)
                 elif button == 'save':
                     self.options()
 
@@ -216,3 +218,17 @@ class ControllerRota():
                 duration.append(minutes)
 
         return duration
+    
+    def allocDriver(self, route):
+        while True:        
+            list = self.__dao_motorista.list()        
+            button, values = self.__view.allocDriver(list)
+            if not self.__session.menu(button):                
+                if button == 'sel':
+                    if len(values['select']) > 0:
+                        motorista = values['select'][0]                        
+                        route.motorista = motorista
+                        self.__dao_rota.update(route)
+                        break
+                elif button == 'back':
+                    break

@@ -31,4 +31,5 @@ class ControllerUsuario():
 
             return False
         except Exception:
+            print('deu ruim =/')
             pass
