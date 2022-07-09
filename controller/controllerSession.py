@@ -1,4 +1,5 @@
 from controller.controllerCarga import ControllerCarga
+from controller.controllerDestinatario import ControllerDestinatario
 from controller.controllerMotorista import ControllerMotorista
 from controller.controllerRota import ControllerRota
 from controller.controllerCarga import ControllerCarga
@@ -8,6 +9,7 @@ class ControllerSession():
 
     def __init__(self):
         self.__controller_motorista = ControllerMotorista(self)
+        self.__controller_destinatatio = ControllerDestinatario(self)
         self.__controller_rota = ControllerRota(self)
         self.__controller_carga = ControllerCarga(self)
 
@@ -32,5 +34,6 @@ class ControllerSession():
         while True:
             self.__controller_rota.options()
 
-    def session_receiver(self):
-        pass
+    def session_client(self):
+        while True:
+            self.__controller_destinatatio.insert()

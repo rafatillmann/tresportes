@@ -2,7 +2,7 @@ from model.usuario import Usuario
 
 
 class Destinatario(Usuario):
-    def __init__(self, nome: str, email: str, cpf: int, senha: str, cnpj: str, endereco: str, complemento: str, telefone: str):
+    def __init__(self, nome: str = None, email: str = None, cpf: int = None, senha: str = None, cnpj: str = None, endereco: str = None, complemento: str = None, telefone: str = None):
         super().__init__(nome, email, cpf, senha)
         self.__cnpj = cnpj
         self.__endereco = endereco

@@ -11,7 +11,7 @@ class DaoDestinatario(AbstractDao):
         self.__records = []
 
         try:
-            fields = 'id integer NOT NULL, nome varchar(255) NOT NULL, email varchar(255) NOT NULL, cpf integer NOT NULL, senha varchar(255), cnpj integer NOT NULL, endereco varchar(255) NOT NULL, complemento varchar(255), telefone varchar(255) NOT NULL, PRIMARY KEY(id AUTOINCREMENT)'
+            fields = 'id integer NOT NULL, nome varchar(255), email varchar(255), cpf integer, senha varchar(255), cnpj integer, endereco varchar(255) NOT NULL, complemento varchar(255), telefone varchar(255), PRIMARY KEY(id AUTOINCREMENT)'
             self.__database.cursor.execute(
                 f'CREATE TABLE IF NOT EXISTS {self.__table_name} ({fields})')
             self.__database.connection.commit()
@@ -21,10 +21,11 @@ class DaoDestinatario(AbstractDao):
 
     def insert(self, destinatario: Destinatario):
         fields = 'nome, email, cpf, senha, cnpj, endereco, complemento, telefone'
-        values = f'"{destinatario.nome}", "{destinatario.email}", "{destinatario.cpf}", "{destinatario.senha}", "{destinatario.cnpj}", "{destinatario.endereco}", "{destinatario.complemento}", "{destinatario.telefone}"'
+        values = (destinatario.nome, destinatario.email, destinatario.cpf, destinatario.senha,
+                  destinatario.cnpj, destinatario.endereco, destinatario.complemento, destinatario.telefone)
         try:
             self.__database.cursor.execute(
-                f'INSERT INTO {self.__table_name} ({fields}) VALUES({values})')
+                f'INSERT INTO {self.__table_name} ({fields}) VALUES(?, ?, ?, ?, ?, ?, ?, ?)', values)
             self.__database.connection.commit()
 
             destinatario.id = self.__database.cursor.lastrowid
@@ -35,11 +36,13 @@ class DaoDestinatario(AbstractDao):
             return False
 
     def update(self, destinatario: Destinatario):
-        fields = f'nome = "{destinatario.nome}", email = "{destinatario.email}", cpf = "{destinatario.cpf}", senha = "{destinatario.senha}", cnpj= "{destinatario.cnpj}", endereco = "{destinatario.endereco}", complemento = "{destinatario.complemento}", telefone = "{destinatario.telefone}"'
+        fields = f'nome = ?, email = ?, cpf = ?, senha = ?, cnpj= ?, endereco = ?, complemento = ?, telefone = ?'
+        values = (destinatario.nome, destinatario.email, destinatario.cpf, destinatario.senha,
+                  destinatario.cnpj, destinatario.endereco, destinatario.complemento, destinatario.telefone)
 
         try:
             self.__database.cursor.execute(
-                f'UPDATE {self.__table_name} SET {fields} WHERE id = {destinatario.id}')
+                f'UPDATE {self.__table_name} SET {fields} WHERE id = {destinatario.id}', values)
             self.__database.connection.commit()
             return True
         except OperationalError as error:

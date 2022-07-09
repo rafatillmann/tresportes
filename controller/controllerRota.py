@@ -24,12 +24,12 @@ class ControllerRota():
         self.__controller_carga = ControllerCarga(session)
         self.__view_motorista = ViewMotorista()
         self.__dao_motorista = DaoMotorista
-        
+
     def options(self):
         while True:
             if Session.type == 'Motorista':
                 list = self.__dao_rota.list_by_motorista(Session.user)
-                button, values = self.__view_motorista.options(list)                
+                button, values = self.__view_motorista.options(list)
                 if not self.__session.menu(button):
                     if 'view' in button:
                         route = self.__dao_rota.read(int(button.split(':')[1]))
@@ -37,7 +37,7 @@ class ControllerRota():
                     elif button == 'finish':
                         self.finish()
             elif Session.type == 'Gerente':
-                list = self.__dao_rota.list()            
+                list = self.__dao_rota.list()
                 button, values = self.__view.options(list)
                 if not self.__session.menu(button):
                     if button == 'insert':
@@ -49,7 +49,7 @@ class ControllerRota():
                         route = self.__dao_rota.read(int(button.split(':')[1]))
                         self.view(route)
                     elif button == 'finish':
-                        self.finish()               
+                        self.finish()
 
     def insert(self):
         while True:
@@ -103,7 +103,7 @@ class ControllerRota():
                 elif button == 'save':
                     self.options()
 
-    def view(self, route):               
+    def view(self, route):
         while True:
             if Session.type == 'Gerente':
                 roads = self.__dao_percurso.read_route_not_finish(route)
@@ -115,7 +115,8 @@ class ControllerRota():
             elif Session.type == 'Motorista':
                 roads = self.__dao_percurso.read_route_not_finish(route)
                 loads = self.__controller_carga.read_by_route(route)
-                button, values = self.__view_motorista.view(route,roads, loads)
+                button, values = self.__view_motorista.view(
+                    route, roads, loads)
                 if not self.__session.menu(button):
                     if button == 'back':
                         break
@@ -180,6 +181,11 @@ class ControllerRota():
                             route = Rota(tempo_estimado=sum(dt.values()))
                             self.__dao_rota.insert(route)
 
+                        if loads:
+                            for load in loads:
+                                load.rota = None
+                                self.__controller_carga.update_carga(load)
+
                         for value in values['select']:
                             value.rota = route
                             self.__controller_carga.update_carga(value)
@@ -218,15 +224,15 @@ class ControllerRota():
                 duration.append(minutes)
 
         return duration
-    
+
     def allocDriver(self, route):
-        while True:        
-            list = self.__dao_motorista.list()        
+        while True:
+            list = self.__dao_motorista.list()
             button, values = self.__view.allocDriver(list)
-            if not self.__session.menu(button):                
+            if not self.__session.menu(button):
                 if button == 'sel':
                     if len(values['select']) > 0:
-                        motorista = values['select'][0]                        
+                        motorista = values['select'][0]
                         route.motorista = motorista
                         self.__dao_rota.update(route)
                         break

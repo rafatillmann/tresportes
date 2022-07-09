@@ -57,8 +57,12 @@ class View(ABC):
                     [sg.Image(source='./assets/route.png',
                               background_color="#222624", )],
                     [sg.Button(button_text='Rotas', key='route', size=(
-                        15, 2), font=('Arial', 10, 'bold'), pad=0, border_width=0)],                    
+                        15, 2), font=('Arial', 10, 'bold'), pad=0, border_width=0)],
                     ]
+        elif Session.type == 'Destinatario':
+            menu = [[sg.Text('Destinatário', font=('Arial', 11, 'bold'), background_color="#222624", text_color="#FFFFFF")],
+                    ]
+
         return menu
 
     def text(self, text):

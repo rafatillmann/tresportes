@@ -1,8 +1,5 @@
-import hashlib
+numbers = "15.703.598/0001-52"
 
-
-i = "admin".encode()
-
-hash = hashlib.md5(i)
-
-print(hash.hexdigest())
+values = [char for char in numbers if char.isdigit()]
+cnpj = int(''.join(values))
+print(cnpj)

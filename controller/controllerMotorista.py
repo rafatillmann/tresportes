@@ -42,7 +42,7 @@ class ControllerMotorista():
                             if email_validate(values['email']):
                                 if self.read_by_email(values['email']):
                                     self.__view.popUp(
-                                        'Operação inválida, motorista já cadastrado')
+                                        'Operação inválida, já existe um motorista cadastrado com esse e-mail')
                                 else:
                                     passwd = generate_random_password()
                                     password = passwd.encode()

@@ -17,10 +17,10 @@ class ViewDestinatario(View):
             layoutForm = [[sg.Text("Cadastro", font=('Arial', 14, 'bold'))],
                           [sg.Text('Nome', size=(15, 1)), sg.InputText(
                               destinatario.nome, key='nome')],
-                          [sg.Text('CPF', size=(15, 1)), sg.InputText(
-                              destinatario.cpf, key='cpf')],
-                          [sg.Text('Senha', size=(15, 1)), sg.InputText(
-                              destinatario.senha, key='senha')],
+                          [sg.Text('CPF/CNPJ', size=(15, 1)), sg.InputText(
+                              destinatario.cpf, key='cpf/cnpj')],
+                          [sg.Text('Senha', size=(15, 1)),
+                           sg.InputText(key='senha')],
                           [sg.Text('E-mail', size=(15, 1)),
                            sg.InputText(destinatario.email, key='email')],
                           [sg.Text('Endereço', size=(15, 1)), sg.InputText(
@@ -35,8 +35,8 @@ class ViewDestinatario(View):
             layoutForm = [[sg.Text("Cadastro", font=('Arial', 14, 'bold'))],
                           [sg.Text('Nome', size=(15, 1)),
                            sg.InputText(key='nome')],
-                          [sg.Text('CPF', size=(15, 1)),
-                           sg.InputText(key='cpf')],
+                          [sg.Text('CPF/CNPJ', size=(15, 1)),
+                           sg.InputText(key='cpf/cnpj')],
                           [sg.Text('Senha', size=(15, 1)),
                            sg.InputText(key='senha')],
                           [sg.Text('E-mail', size=(15, 1)),
@@ -49,20 +49,23 @@ class ViewDestinatario(View):
                            sg.InputText(key='telefone')],
                           ]
 
-        layout = [layoutForm, [sg.Button('Cadastrar', key='save')]]
+        layout = [[sg.Column(layoutForm)], [
+            sg.Button('Cadastrar', key='save')]]
 
-        window = sg.Window('Destinatário', layout,
-                           default_element_size=(30, 1), margins=(50, 10), element_justification=CENTER)
+        window = self.window(layout)
 
         while True:
             button, values = window.read()
 
             if button == 'save':
                 required = False
-
                 for value in values:
-                    if values[value] == '' or values[value] == None:
-                        required = True
+                    if destinatario:
+                        if (values[value] == '' or values[value] == None) and value != 'senha':
+                            required = True
+                    else:
+                        if values[value] == '' or values[value] == None:
+                            required = True
                 if required:
                     self.popUp(
                         'Obrigatório o preenchimento de todos os campos')

@@ -8,7 +8,6 @@ from util.session import Session
 class Login():
     def __init__(self):
         self.__controller_usuario = ControllerUsuario()
-        self.__controller_destinatario = ControllerDestinatario()
         self.__controller_session = ControllerSession()
         self.__view = ViewLogin()
 
@@ -28,7 +27,7 @@ class Login():
                         else:
                             self.__view.popUp('Usuário ou senha incorretos')
                 elif button == 'insert':
-                    self.__controller_destinatario.insert()
+                    self.__controller_session.session_client()
             except Exception:
                 self.__view.popUp()
 
@@ -38,7 +37,6 @@ class Login():
         elif Session.type == 'Gerente':
             self.__controller_session.session_manager()
         elif Session.type == 'Destinatario':
-            while True:
-                ControllerDestinatario().update(email)
+            self.__controller_session.session_client()
         else:
             pass
