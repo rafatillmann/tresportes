@@ -13,22 +13,24 @@ class Login():
         self.__view = ViewLogin()
 
     def start(self):
-        try:
-            button, values = self.__view.login()
-            if button == 'save':
-                email = values['email']
-                senha = values['senha']
-                if email and senha:
-                    login = self.__controller_usuario.login(email, senha)
-                    if login:
-                        self.app(email)
-                    else:
-                        pass
-            elif button == 'insert':
-                self.__controller_destinatario.insert()
-
-        except Exception:
-            self.__view.popUp()
+        while True:
+            try:
+                button, values = self.__view.login()
+                if button == None:
+                    exit()
+                elif button == 'save':
+                    email = values['email']
+                    senha = values['senha']
+                    if email and senha:
+                        login = self.__controller_usuario.login(email, senha)
+                        if login:
+                            self.app(email)
+                        else:
+                            self.__view.popUp('Usuário ou senha incorretos')
+                elif button == 'insert':
+                    self.__controller_destinatario.insert()
+            except Exception:
+                self.__view.popUp()
 
     def app(self, email: str = None):
         if Session.type == 'Motorista':
@@ -40,5 +42,3 @@ class Login():
                 ControllerDestinatario().update(email)
         else:
             pass
-        
-    

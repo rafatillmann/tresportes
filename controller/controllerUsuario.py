@@ -1,3 +1,4 @@
+import hashlib
 from util.session import Session
 from dao.daoDestinatario import DaoDestinatario
 from dao.daoGerente import DaoGerente
@@ -24,11 +25,13 @@ class ControllerUsuario():
                 type = "Motorista"
 
             if(user):
-                if(user.senha == senha):
+                password = senha.encode()
+                password = hashlib.md5(
+                    password).hexdigest()
+                if(user.senha == password):
                     Session.type = type
                     Session.user = user
                     return True
-
             return False
         except Exception:
             print('deu ruim =/')

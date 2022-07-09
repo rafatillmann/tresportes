@@ -1,6 +1,8 @@
+import hashlib
 from random import randint
 from model.destinatario import Destinatario
 from dao.daoDestinatario import DaoDestinatario
+from util.utils import generate_random_password
 from view.viewCadastroDestinatario import ViewDestinatario
 
 
@@ -18,7 +20,10 @@ class ControllerDestinatario:
             button, values = self.__view.display()
 
             if button == 'save':
-                destinatario = Destinatario(values['nome'], values['email'], values['cpf'], values['senha'],
+                password = values['senha'].encode()
+                password = hashlib.md5(
+                    password).hexdigest()
+                destinatario = Destinatario(values['nome'], values['email'], values['cpf'], password,
                                             values['cpf'], values['endereco'], values['complemento'], values['telefone'])
 
                 self.__dao_destinatario.insert(destinatario)
@@ -32,10 +37,13 @@ class ControllerDestinatario:
             button, values = self.__view.display(destinatario)
 
             if button == 'save':
+                password = values['senha'].encode()
+                password = hashlib.md5(
+                    password).hexdigest()
                 destinatario.nome = values['nome']
                 destinatario.email = values['email']
                 destinatario.cpf = values['cpf']
-                destinatario.senha = values['senha']
+                destinatario.senha = password
                 destinatario.cnpj = values['cpf']
                 destinatario.endereco = values['endereco']
                 destinatario.complemento = values['complemento']

@@ -1,3 +1,4 @@
+import hashlib
 from util.utils import cpf_validate, email_validate, generate_random_password
 from view.viewCadastroMotorista import ViewCadastroMotorista
 from dao.daoMotorista import DaoMotorista
@@ -43,14 +44,18 @@ class ControllerMotorista():
                                     self.__view.popUp(
                                         'Operação inválida, motorista já cadastrado')
                                 else:
+                                    passwd = generate_random_password()
+                                    password = passwd.encode()
+                                    password = hashlib.md5(
+                                        password).hexdigest()
                                     veiculo = Veiculo(values['tipo'], values['marca'], values['modelo'],
                                                       values['placa'], int(values['capacidade']), int(values['largura']), int(values['comprimento']), int(values['altura']))
                                     motorista = Motorista(values['nome'], values['email'],
-                                                          int(values['cpf']), generate_random_password(), int(values['carga_horaria']), veiculo)
+                                                          int(values['cpf']), password, int(values['carga_horaria']), veiculo)
 
                                     if self.__dao_veiculo.insert(veiculo) and self.__dao_motorista.insert(motorista):
                                         self.__view.popUp(
-                                            f'Login tempotário do motorista, repasse essas informações.\nE-mail: {motorista.email}\nSenha: {motorista.senha}')
+                                            f'Login tempotário do motorista, repasse essas informações.\nE-mail: {motorista.email}\nSenha: {passwd}')
                                         break
                                     else:
                                         self.__view.popUp()
