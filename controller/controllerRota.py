@@ -142,77 +142,82 @@ class ControllerRota():
 
     def add(self, route=None, loads=None):
         while True:
-            list = self.__controller_carga.read_unused()
-            if loads:
-                for load in loads:
-                    list.append(load)
-            button, values = self.__view.select_load(list)
-            if not self.__session.menu(button):
-                if button == 'back':
-                    break
-                elif button == 'sel':
-                    destinations = []
-                    duration = []
-                    origins = self.__dao_ponto.getOrigins()
-                    if values['select']:
-                        for value in values['select']:
-                            destinations.append(
-                                f'{value.destinatario.endereco}, Florianópolis, Santa Catarina, Brasil')
-                        matrix = self.__api.request(
-                            origins.endereco, destinations)
-
-                        for row in matrix.get('rows'):
-                            for element in row.get('elements'):
-                                duration.append(element.get(
-                                    'duration').get('text'))
-
-                        duration = self.convertTimes(duration)
-
-                        dt = {}
-                        for i, address in enumerate(matrix.get('destination_addresses')):
-                            dt[address] = duration[i]
-
-                        dt = {key: value for key, value in sorted(
-                            dt.items(), key=lambda item: item[1])}
-
-                        if route:
-                            route.tempo_estimado = sum(dt.values())
-                            self.__dao_rota.update(route)
-
-                            roads = self.__dao_percurso.read_route(
-                                route)
-                            for road in roads:
-                                self.__dao_percurso.delete(road)
-                        else:
-                            route = Rota(tempo_estimado=sum(dt.values()))
-                            self.__dao_rota.insert(route)
-
-                        if loads:
-                            for load in loads:
-                                load.rota = None
-                                self.__controller_carga.update_data(load)
-
-                        for value in values['select']:
-                            value.rota = route
-                            self.__controller_carga.update_data(value)
-
-                        spots = []
-                        spots.append(origins)
-                        for key, value in dt.items():
-                            spot = Ponto(endereco=key)
-                            if self.__dao_ponto.insert(spot):
-                                spots.append(spot)
-
-                        for cur, nxt in zip(spots, spots[1:] + ['end']):
-                            if nxt == 'end':
-                                break
-                            else:
-                                road = Percurso(
-                                    pontoA=cur, pontoB=nxt, rota=route)
-                                self.__dao_percurso.insert(road)
-                        return route
-                    else:
+            try:
+                list = self.__controller_carga.read_unused()
+                if loads:
+                    for load in loads:
+                        list.append(load)
+                button, values = self.__view.select_load(list)
+                if not self.__session.menu(button):
+                    if button == 'back':
                         break
+                    elif button == 'sel':
+                        destinations = []
+                        duration = []
+                        origins = self.__dao_ponto.getOrigins()
+                        if values['select']:
+                            for value in values['select']:
+                                destinations.append(
+                                    f'{value.destinatario.endereco}, Florianópolis, Santa Catarina, Brasil')
+
+                            matrix = self.__api.request(
+                                origins.endereco, destinations)
+
+                            for row in matrix.get('rows'):
+                                for element in row.get('elements'):
+                                    duration.append(element.get(
+                                        'duration').get('text'))
+
+                            duration = self.convertTimes(duration)
+
+                            dt = {}
+                            for i, address in enumerate(matrix.get('destination_addresses')):
+                                dt[address] = duration[i]
+
+                            dt = {key: value for key, value in sorted(
+                                dt.items(), key=lambda item: item[1])}
+
+                            if route:
+                                route.tempo_estimado = sum(dt.values())
+                                self.__dao_rota.update(route)
+
+                                roads = self.__dao_percurso.read_route(
+                                    route)
+                                for road in roads:
+                                    self.__dao_percurso.delete(road)
+                            else:
+                                route = Rota(tempo_estimado=sum(dt.values()))
+                                self.__dao_rota.insert(route)
+
+                            if loads:
+                                for load in loads:
+                                    load.rota = None
+                                    self.__controller_carga.update_data(load)
+
+                            for value in values['select']:
+                                value.rota = route
+                                self.__controller_carga.update_data(value)
+
+                            spots = []
+                            spots.append(origins)
+                            for key, value in dt.items():
+                                spot = Ponto(endereco=key)
+                                if self.__dao_ponto.insert(spot):
+                                    spots.append(spot)
+
+                            for cur, nxt in zip(spots, spots[1:] + ['end']):
+                                if nxt == 'end':
+                                    break
+                                else:
+                                    road = Percurso(
+                                        pontoA=cur, pontoB=nxt, rota=route)
+                                    self.__dao_percurso.insert(road)
+                            return route
+                        else:
+                            break
+            except Exception:
+                self.__view.popUp(
+                    'Não foi possível definir o percurso da rota, tente novamente!')
 
     def convertTimes(self, array):
 
