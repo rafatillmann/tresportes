@@ -81,6 +81,13 @@ class DaoPercurso(AbstractDao):
                 result.append(record)
         return result
 
+    def read_route(self, route):
+        result = []
+        for record in self.__records:
+            if record.rota == route:
+                result.append(record)
+        return result
+
     def list(self):
         return self.__records
 

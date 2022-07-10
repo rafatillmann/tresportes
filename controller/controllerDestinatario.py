@@ -1,8 +1,8 @@
 import hashlib
-from random import randint
 from model.destinatario import Destinatario
 from dao.daoDestinatario import DaoDestinatario
-from util.utils import cnpj_validate, cpf_validate, email_validate, generate_random_password
+from util.session import Session
+from util.utils import cnpj_validate, cpf_validate, email_validate
 from view.viewCadastroDestinatario import ViewDestinatario
 
 
@@ -17,39 +17,44 @@ class ControllerDestinatario:
         pass
 
     def insert(self):
-        try:
-            button, values = self.__view.display()
-            if not self.__session.menu(button):
-                if button == 'save':
-                    cpf = cpf_validate(values['cpf/cnpj'])
-                    cnpj = cnpj_validate(values['cpf/cnpj'])
-                    if cpf or cnpj:
-                        if email_validate(values['email']):
-                            if self.read_by_email(values['email']):
-                                self.__view.popUp(
-                                    'Operação inválida, já existe um destinatário cadastrado com esse e-mail')
+        while True:
+            try:
+                button, values = self.__view.display()
+                if not self.__session.menu(button):
+                    if button == 'save':
+                        cpf = cpf_validate(values['cpf/cnpj'])
+                        cnpj = cnpj_validate(values['cpf/cnpj'])
+                        if cpf or cnpj:
+                            if email_validate(values['email']):
+                                if self.read_by_email(values['email']):
+                                    self.__view.popUp(
+                                        'Operação inválida, já existe um destinatário cadastrado com esse e-mail')
+                                else:
+                                    password = values['senha'].encode()
+                                    password = hashlib.md5(
+                                        password).hexdigest()
+                                    numbers = [
+                                        char for char in values['cpf/cnpj'] if char.isdigit()]
+                                    doc = int(''.join(numbers))
+                                    destinatario = Destinatario(values['nome'], values['email'], doc if cpf else None, password,
+                                                                doc if cnpj else None, values['endereco'], values['complemento'], values['telefone'])
+                                    if self.__dao_destinatario.insert(
+                                            destinatario):
+                                        break
+                                    else:
+                                        self.__view.popUp()
                             else:
-                                password = values['senha'].encode()
-                                password = hashlib.md5(
-                                    password).hexdigest()
-                                numbers = [
-                                    char for char in values['cpf/cnpj'] if char.isdigit()]
-                                doc = int(''.join(numbers))
-                                destinatario = Destinatario(values['nome'], values['email'], doc if cpf else None, password,
-                                                            doc if cnpj else None, values['endereco'], values['complemento'], values['telefone'])
-                                self.__dao_destinatario.insert(destinatario)
+                                self.__view.popUp(
+                                    'Não foi possível finalizar o cadastro, e-mail inválido')
                         else:
                             self.__view.popUp(
-                                'Não foi possível finalizar o cadastro, e-mail inválido')
-                    else:
-                        self.__view.popUp(
-                            'Não foi possível finalizar o cadastro, CPF/CNPJ inválido')
-        except Exception as e:
-            self.__view.popUp()
+                                'Não foi possível finalizar o cadastro, CPF/CNPJ inválido')
+            except Exception as e:
+                self.__view.popUp(e)
 
-    def update(self, email: str = None):
+    def update(self):
         try:
-            destinatario = self.__dao_destinatario.readByEmail(email)
+            destinatario = Session.user
             button, values = self.__view.display(destinatario)
             if not self.__session.menu(button):
                 if button == 'save':
@@ -57,9 +62,12 @@ class ControllerDestinatario:
                     cnpj = cnpj_validate(values['cpf/cnpj'])
                     if cpf or cnpj:
                         if email_validate(values['email']):
-                            password = values['senha'].encode()
-                            password = hashlib.md5(
-                                password).hexdigest()
+                            if values['senha']:
+                                password = values['senha'].encode()
+                                password = hashlib.md5(
+                                    password).hexdigest()
+                            else:
+                                password = destinatario.senha
 
                             numbers = [
                                 char for char in values['cpf/cnpj'] if char.isdigit()]

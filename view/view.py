@@ -62,6 +62,9 @@ class View(ABC):
         elif Session.type == 'Destinatario':
             menu = [[sg.Text('Destinatário', font=('Arial', 11, 'bold'), background_color="#222624", text_color="#FFFFFF")],
                     ]
+        else:
+            menu = [[sg.Text('Trêsportes', font=('Arial', 11, 'bold'), background_color="#222624", text_color="#FFFFFF")],
+                    ]
 
         return menu
 

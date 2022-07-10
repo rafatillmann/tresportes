@@ -75,5 +75,5 @@ class ControllerCarga():
     def read_by_route(self, route):
         return self.__dao_carga.read_by_route(route)
 
-    def update_carga(self, carga: Carga):
+    def update_data(self, carga: Carga):
         return self.__dao_carga.update(carga)

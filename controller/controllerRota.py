@@ -75,10 +75,16 @@ class ControllerRota():
             button, values = self.__view.edit(route, roads, loads)
             if not self.__session.menu(button):
                 if button == 'cancel':
-                    roads = self.__dao_percurso.read_route_not_finish(
+                    roads = self.__dao_percurso.read_route(
                         route)
                     for road in roads:
                         self.__dao_percurso.delete(road)
+
+                    loads = self.__controller_carga.read_by_route(route)
+                    for load in loads:
+                        load.rota = None
+                        self.__controller_carga.update_data(load)
+
                     self.__dao_rota.delete(route)
                     break
                 elif button == 'edit':
@@ -173,7 +179,7 @@ class ControllerRota():
                             route.tempo_estimado = sum(dt.values())
                             self.__dao_rota.update(route)
 
-                            roads = self.__dao_percurso.read_route_not_finish(
+                            roads = self.__dao_percurso.read_route(
                                 route)
                             for road in roads:
                                 self.__dao_percurso.delete(road)
@@ -184,11 +190,11 @@ class ControllerRota():
                         if loads:
                             for load in loads:
                                 load.rota = None
-                                self.__controller_carga.update_carga(load)
+                                self.__controller_carga.update_data(load)
 
                         for value in values['select']:
                             value.rota = route
-                            self.__controller_carga.update_carga(value)
+                            self.__controller_carga.update_data(value)
 
                         spots = []
                         spots.append(origins)

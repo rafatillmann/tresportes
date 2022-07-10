@@ -1,7 +1,6 @@
 from controller.controllerSession import ControllerSession
 from view.viewLogin import ViewLogin
 from controller.controllerUsuario import ControllerUsuario
-from controller.controllerDestinatario import ControllerDestinatario
 from util.session import Session
 
 
@@ -27,7 +26,7 @@ class Login():
                         else:
                             self.__view.popUp('Usuário ou senha incorretos')
                 elif button == 'insert':
-                    self.__controller_session.session_client()
+                    self.__controller_session.sign_up()
             except Exception:
                 self.__view.popUp()
 

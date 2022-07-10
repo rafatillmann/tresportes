@@ -36,4 +36,7 @@ class ControllerSession():
 
     def session_client(self):
         while True:
-            self.__controller_destinatatio.insert()
+            self.__controller_destinatatio.update()
+
+    def sign_up(self):
+        self.__controller_destinatatio.insert()
