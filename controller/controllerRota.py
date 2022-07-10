@@ -141,8 +141,8 @@ class ControllerRota():
                 pass
 
     def add(self, route=None, loads=None):
-        while True:
-            try:
+        try:
+            while True:
                 list = self.__controller_carga.read_unused()
                 if loads:
                     for load in loads:
@@ -171,8 +171,10 @@ class ControllerRota():
                             duration = self.convertTimes(duration)
 
                             dt = {}
+                            addresses = {}
                             for i, address in enumerate(matrix.get('destination_addresses')):
                                 dt[address] = duration[i]
+                                addresses[address] = values['select'][i].destinatario.endereco
 
                             dt = {key: value for key, value in sorted(
                                 dt.items(), key=lambda item: item[1])}
@@ -201,7 +203,8 @@ class ControllerRota():
                             spots = []
                             spots.append(origins)
                             for key, value in dt.items():
-                                spot = Ponto(endereco=key)
+                                spot = Ponto(
+                                    descricao=key, endereco=addresses[key])
                                 if self.__dao_ponto.insert(spot):
                                     spots.append(spot)
 
@@ -215,9 +218,10 @@ class ControllerRota():
                             return route
                         else:
                             break
-            except Exception:
-                self.__view.popUp(
-                    'Não foi possível definir o percurso da rota, tente novamente!')
+        except Exception as e:
+            print(e)
+            self.__view.popUp(
+                'Não foi possível definir o percurso da rota, tente novamente!')
 
     def convertTimes(self, array):
 

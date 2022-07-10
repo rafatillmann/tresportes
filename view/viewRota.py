@@ -223,11 +223,11 @@ class ViewRota(View):
         if roads:
             road = roads[0]
             info = [[sg.Sizer(500)],
-                    [sg.Text(road.pontoA.endereco, font=('Arial', 10, 'bold'),
+                    [sg.Text(road.pontoA.descricao or road.pontoA.endereco, font=('Arial', 10, 'bold'),
                              background_color='#D9D9D9')],
                     [sg.Image(source='./assets/points.png',
                               background_color='#D9D9D9')],
-                    [sg.Text(road.pontoB.endereco, font=('Arial', 10, 'bold'),
+                    [sg.Text(road.pontoB.descricao or road.pontoB.endereco, font=('Arial', 10, 'bold'),
                              background_color='#D9D9D9')]]
 
             card = [
