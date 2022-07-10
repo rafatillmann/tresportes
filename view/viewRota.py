@@ -1,4 +1,6 @@
 from array import array
+from faulthandler import disable
+from lib2to3.pgen2 import driver
 from pickle import TRUE
 from tkinter import BOTTOM, CENTER, TOP
 from view.view import View
@@ -66,8 +68,9 @@ class ViewRota(View):
         return button, values
 
     def edit(self, route, roads, loads):
+        driver = True if route.motorista else False
         road = self.road(roads)
-        loads = self.loads(loads)
+        loads = self.loads(loads, driver=driver)
         layout = [[sg.Text('Revisão', font=('Arial', 20, 'bold'))],
                   [self.button('Alocar', 'allocation')],
                   [sg.Column(road, vertical_alignment=TOP),
@@ -195,8 +198,8 @@ class ViewRota(View):
             info = [[sg.Text(f'Rota {item.id}', font=('Arial', 12, 'bold'), background_color='#D9D9D9')],
                     [sg.Text('Nenhum motorista alocado', font=('Arial', 10, 'bold'),
                              background_color='#D9D9D9')]]
-            buttons = [[self.button('Editar', f'edit:{item.id}') if not finish else None,
-                        self.button('Visualizar' if not item.motorista else 'Acompanhar', f'view:{item.id}')]]
+            buttons = [[self.button('Editar', f'edit:{item.id}') if not finish else sg.Text('', background_color='#D9D9D9'),
+                        self.button('Acompanhar' if item.motorista and not item.fim else 'Visualizar', f'view:{item.id}')]]
 
             card = [[sg.Column(info, background_color='#D9D9D9', pad=((0, 100), (0, 0))), sg.Column(
                 buttons, vertical_alignment=BOTTOM, background_color='#D9D9D9')]]
@@ -246,7 +249,7 @@ class ViewRota(View):
 
             return card
 
-    def loads(self, list, view=False):
+    def loads(self, list, view=False, driver=None):
         cards = []
         for item in list:
             info = [[sg.Sizer(500)],
@@ -260,6 +263,6 @@ class ViewRota(View):
         loads = [[sg.Text('Cargas', font=('Arial', 14, 'bold'))],
                  [sg.Column(cards, scrollable=True, vertical_scroll_only=True,
                             sbar_arrow_width=5, sbar_width=5, sbar_relief='solid', size=(None, 100))],
-                 [self.white_button('Editar', 'edit') if not view else sg.Text('')]]
+                 [self.white_button('Editar', 'edit', disableb=True if driver else False) if not view else sg.Text('')]]
 
         return loads

@@ -62,6 +62,40 @@ class ViewMotorista(View):
 
         return button, values
 
+    def finish(self, inicial_list: array):
+        cards = self.cards(inicial_list, finish=True)
+
+        layout = [[sg.Text('Rotas', font=('Arial', 20, 'bold'))],
+                  [sg.Button('Pesquisar', key='search', font=(
+                      'Arial', 10, 'bold')), sg.Button('Visualizar finalizadas', key='finish', font=('Arial', 10, 'bold'))],
+                  [sg.Input(size=(20, 5), key='input', expand_x=True)],
+                  [sg.Column(cards, scrollable=True,
+                             vertical_scroll_only=True, sbar_relief='solid', size=(None, 400), key='select')]
+
+                  ]
+
+        window = self.window(layout)
+
+        while True:
+            button, values = window.read()
+
+            if button == 'search':
+                new_values = []
+                search = values['input']
+                for object in inicial_list:
+                    if search.lower() in f'Rota {object.id}'.lower():
+                        new_values.append(object)
+
+                window.close()
+                layout = self.refresh_cards(new_values, finish=True)
+                window = self.window(layout)
+            else:
+                break
+
+        window.close()
+
+        return button, values
+
     # Components
 
     # ---------- components ------------
@@ -99,16 +133,16 @@ class ViewMotorista(View):
         if roads:
             road = roads[0]
             info = [[sg.Sizer(500)],
-                    [sg.Text(road.pontoA.endereco, font=('Arial', 10, 'bold'),
+                    [sg.Text(road.pontoA.descricao or road.pontoA.endereco, font=('Arial', 10, 'bold'),
                              background_color='#D9D9D9')],
                     [sg.Image(source='./assets/points.png',
                               background_color='#D9D9D9')],
-                    [sg.Text(road.pontoB.endereco, font=('Arial', 10, 'bold'),
+                    [sg.Text(road.pontoB.descricao or road.pontoB.endereco, font=('Arial', 10, 'bold'),
                              background_color='#D9D9D9')]]
 
             card = [
                 [sg.Text('Percurso', font=('Arial', 14, 'bold'))], [
-                    sg.Column(info, background_color='#D9D9D9', element_justification=CENTER)]]
+                    sg.Column(info, background_color='#D9D9D9', element_justification=CENTER)], [self.button('Iniciar', f'start:{road.id}', disableb=True if road.inicio else False), self.button('Finalizar', f'finish:{road.id}', disableb=True if road.fim else False)]]
 
             return card
         else:

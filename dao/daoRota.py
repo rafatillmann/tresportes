@@ -54,21 +54,6 @@ class DaoRota(AbstractDao):
             self.__database.connection.rollback()
             return False
 
-    def finish(self, rota: Rota):
-        try:
-            self.__database.cursor.execute(
-                f'UPDATE {self.__table_name} SET deleted=1 WHERE id = {rota.id}')
-            self.__database.connection.commit()
-
-            for record in self.__records:
-                if(record.id == rota.id):
-                    self.__records.remove(record)
-                    self.__deleted.append(record)
-            return True
-        except OperationalError as error:
-            self.__database.connection.rollback()
-            return False
-
     def delete(self, rota: Rota):
         try:
             self.__database.cursor.execute(
@@ -89,17 +74,32 @@ class DaoRota(AbstractDao):
                 return record
 
     def list(self):
-        return self.__records
+        result = []
+        for record in self.__records:
+            if not record.fim:
+                result.append(record)
+        return result
 
     def list_by_motorista(self, motorista: Motorista):
         result = []
         for record in self.__records:
-            if(record.motorista == motorista):
+            if(record.motorista == motorista and not record.fim):
                 result.append(record)
         return result
 
-    def deleted(self):
-        return self.__deleted
+    def finish(self):
+        result = []
+        for record in self.__records:
+            if record.fim:
+                result.append(record)
+        return result
+
+    def finish_by_motorista(self, motorista: Motorista):
+        result = []
+        for record in self.__records:
+            if record.motorista == motorista and record.fim:
+                result.append(record)
+        return result
 
     def populate(self):
         records = self.__database.cursor.execute(

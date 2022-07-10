@@ -1,3 +1,4 @@
+from datetime import datetime
 from controller.controllerCarga import ControllerCarga
 from dao.daoPercuso import DaoPercurso
 from dao.daoPonto import DaoPonto
@@ -95,50 +96,87 @@ class ControllerRota():
                     self.options()
 
     def edit(self, route):
-        while True:
-            roads = self.__dao_percurso.read_route_not_finish(route)
-            loads = self.__controller_carga.read_by_route(route)
-            button, values = self.__view.edit(route, roads, loads)
-            if not self.__session.menu(button):
-                if button == 'cancel':
-                    break
-                elif button == 'edit':
-                    self.add(route, loads)
-                elif button == 'allocation':
-                    self.allocDriver(route)
-                elif button == 'save':
-                    self.options()
+        try:
+            while True:
+                roads = self.__dao_percurso.read_route_not_finish(route)
+                loads = self.__controller_carga.read_by_route(route)
+                button, values = self.__view.edit(route, roads, loads)
+                if not self.__session.menu(button):
+                    if button == 'cancel':
+                        break
+                    elif button == 'edit':
+                        self.add(route, loads)
+                    elif button == 'allocation':
+                        self.allocDriver(route)
+                    elif button == 'save':
+                        self.options()
+        except Exception as e:
+            print(e)
 
-    def view(self, route):
-        while True:
-            if Session.type == 'Gerente':
-                roads = self.__dao_percurso.read_route_not_finish(route)
-                loads = self.__controller_carga.read_by_route(route)
-                button, values = self.__view.view(route, roads, loads)
-                if not self.__session.menu(button):
-                    if button == 'back':
-                        break
-            elif Session.type == 'Motorista':
-                roads = self.__dao_percurso.read_route_not_finish(route)
-                loads = self.__controller_carga.read_by_route(route)
-                button, values = self.__view_motorista.view(
-                    route, roads, loads)
-                if not self.__session.menu(button):
-                    if button == 'back':
-                        break
+    def view(self, route: Rota):
+        try:
+            while True:
+                if Session.type == 'Gerente':
+                    roads = self.__dao_percurso.read_route_not_finish(route)
+                    loads = self.__controller_carga.read_by_route(route)
+                    button, values = self.__view.view(route, roads, loads)
+                    if not self.__session.menu(button):
+                        if button == 'back':
+                            break
+                elif Session.type == 'Motorista':
+                    roads = self.__dao_percurso.read_route_not_finish(route)
+                    loads = self.__controller_carga.read_by_route(route)
+                    button, values = self.__view_motorista.view(
+                        route, roads, loads)
+                    if not self.__session.menu(button):
+                        if button == 'back':
+                            break
+                        elif 'start' in button:
+                            road = self.__dao_percurso.read(
+                                int(button.split(':')[1]))
+                            if not road.inicio:
+                                road.inicio = datetime.now()
+                                self.__dao_percurso.update(road)
+                                origin = self.__dao_ponto.getOrigins()
+                                if origin.descricao == road.pontoA.descricao:
+                                    route.inicio = datetime.now()
+                                    self.__dao_rota.update(route)
+                        elif 'finish' in button:
+                            road = self.__dao_percurso.read(
+                                int(button.split(':')[1]))
+                            if not road.fim and road.inicio:
+                                road.fim = datetime.now()
+                                self.__dao_percurso.update(road)
+                                if len(roads) == 1:
+                                    route.fim = datetime.now()
+                                    self.__dao_rota.update(route)
+                            else:
+                                pass
+        except Exception as e:
+            print(e)
 
     def finish(self):
         while True:
             if Session.type == 'Gerente':
-                list = self.__dao_rota.deleted()
+                list = self.__dao_rota.finish()
                 button, values = self.__view.finish(list)
                 if not self.__session.menu(button):
                     if button == 'insert':
                         self.insert()
                     elif button == 'finish':
                         self.finish()
+                    elif 'view' in button:
+                        route = self.__dao_rota.read(int(button.split(':')[1]))
+                        self.view(route)
             elif Session.type == 'Motorista':
-                pass
+                list = self.__dao_rota.finish_by_motorista(Session.user)
+                button, values = self.__view_motorista.finish(list)
+                if not self.__session.menu(button):
+                    if button == 'finish':
+                        self.finish()
+                    elif 'view' in button:
+                        route = self.__dao_rota.read(int(button.split(':')[1]))
+                        self.view(route)
 
     def add(self, route=None, loads=None):
         try:

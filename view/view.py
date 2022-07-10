@@ -83,9 +83,9 @@ class View(ABC):
         return sg.Button(text, key=key, font=(
             'Arial', 10, 'bold'), size=(11, 1), border_width=0, disabled=disableb, tooltip=tooltip)
 
-    def white_button(self, text, key):
+    def white_button(self, text, key, disableb=None):
         return sg.Button(text, key=key, font=(
-            'Arial', 10, 'bold'), size=(11, 1), border_width=0, button_color=("#222624", "#FFFFFF"))
+            'Arial', 10, 'bold'), size=(11, 1), border_width=0, button_color=("#222624", "#FFFFFF"), disabled=disableb)
 
     def gray_button(self, text, key):
         return sg.Button(text, key=key, font=(
