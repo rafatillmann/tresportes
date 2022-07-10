@@ -160,8 +160,13 @@ class ControllerRota():
                                 destinations.append(
                                     f'{value.destinatario.endereco}, Florianópolis, Santa Catarina, Brasil')
 
-                            matrix = self.__api.request(
-                                origins.endereco, destinations)
+                            try:
+                                matrix = self.__api.request(
+                                    origins.endereco, destinations)
+                            except Exception:
+                                self.__view.popUp(
+                                    'Não foi possível definir o percurso da rota, tente novamente!')
+                                break
 
                             for row in matrix.get('rows'):
                                 for element in row.get('elements'):
@@ -218,10 +223,8 @@ class ControllerRota():
                             return route
                         else:
                             break
-        except Exception as e:
-            print(e)
-            self.__view.popUp(
-                'Não foi possível definir o percurso da rota, tente novamente!')
+        except Exception:
+            self.__view.popUp()
 
     def convertTimes(self, array):
 

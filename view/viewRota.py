@@ -196,7 +196,7 @@ class ViewRota(View):
                     [sg.Text('Nenhum motorista alocado', font=('Arial', 10, 'bold'),
                              background_color='#D9D9D9')]]
             buttons = [[self.button('Editar', f'edit:{item.id}') if not finish else None,
-                        self.button('Visualizar', f'view:{item.id}')]]
+                        self.button('Visualizar' if not item.motorista else 'Acompanhar', f'view:{item.id}')]]
 
             card = [[sg.Column(info, background_color='#D9D9D9', pad=((0, 100), (0, 0))), sg.Column(
                 buttons, vertical_alignment=BOTTOM, background_color='#D9D9D9')]]

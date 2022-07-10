@@ -4,10 +4,11 @@ from tkinter import BOTTOM, CENTER, TOP
 from view.view import View
 import PySimpleGUI as sg
 
+
 class ViewMotorista(View):
     def __init__(self):
         super().__init__()
-        
+
     def options(self, inicial_list: array):
 
         cards = self.cards(inicial_list)
@@ -60,18 +61,17 @@ class ViewMotorista(View):
         window.close()
 
         return button, values
-    
 
+    # Components
 
-    #Components
-    
     # ---------- components ------------
 
     def cards(self, list, finish=False):
         cards = []
         for item in list:
-            info = [[sg.Text(f'Rota {item.id}', font=('Arial', 12, 'bold'), background_color='#D9D9D9')]]
-            
+            info = [[sg.Text(f'Rota {item.id}', font=(
+                'Arial', 12, 'bold'), background_color='#D9D9D9')]]
+
             buttons = [[self.button('Visualizar', f'view:{item.id}')]]
 
             card = [[sg.Column(info, background_color='#D9D9D9', pad=((0, 100), (0, 0))), sg.Column(
