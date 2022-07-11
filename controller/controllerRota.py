@@ -138,6 +138,13 @@ class ControllerRota():
                                 road.inicio = datetime.now()
                                 self.__dao_percurso.update(road)
                                 origin = self.__dao_ponto.getOrigins()
+                                loads = self.__controller_carga.read_by_route(
+                                    route)
+                                for load in loads:
+                                    if load.destinatario.endereco == road.pontoB.endereco:
+                                        load.status = 'Saiu para entrega'
+                                        self.__controller_carga.update_data(
+                                            load)
                                 if origin.descricao == road.pontoA.descricao:
                                     route.inicio = datetime.now()
                                     self.__dao_rota.update(route)
@@ -147,6 +154,13 @@ class ControllerRota():
                             if not road.fim and road.inicio:
                                 road.fim = datetime.now()
                                 self.__dao_percurso.update(road)
+                                loads = self.__controller_carga.read_by_route(
+                                    route)
+                                for load in loads:
+                                    if load.destinatario.endereco == road.pontoB.endereco:
+                                        load.status = 'Entregue'
+                                        self.__controller_carga.update_data(
+                                            load)
                                 if len(roads) == 1:
                                     route.fim = datetime.now()
                                     self.__dao_rota.update(route)
