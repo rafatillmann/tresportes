@@ -227,7 +227,7 @@ class ViewRota(View):
             road = roads[0]
             info = [[sg.Sizer(500)],
                     [sg.Text(road.pontoA.descricao or road.pontoA.endereco, font=('Arial', 10, 'bold'),
-                             background_color='#D9D9D9')],
+                             background_color='#D9D9D9', text_color='#757474' if road.inicio else None)],
                     [sg.Image(source='./assets/points.png',
                               background_color='#D9D9D9')],
                     [sg.Text(road.pontoB.descricao or road.pontoB.endereco, font=('Arial', 10, 'bold'),
