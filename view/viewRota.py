@@ -2,7 +2,7 @@ from array import array
 from faulthandler import disable
 from lib2to3.pgen2 import driver
 from pickle import TRUE
-from tkinter import BOTTOM, CENTER, TOP
+from tkinter import BOTTOM, CENTER, RIGHT, TOP
 from view.view import View
 import PySimpleGUI as sg
 
@@ -195,17 +195,19 @@ class ViewRota(View):
     def cards(self, list, finish=False):
         cards = []
         for item in list:
-            info = [[sg.Text(f'Rota {item.id}', font=('Arial', 12, 'bold'), background_color='#D9D9D9')],
-                    [sg.Text('Nenhum motorista alocado', font=('Arial', 10, 'bold'),
+            info = [[sg.Sizer(300)],
+                    [sg.Text(f'Rota {item.id}', font=(
+                        'Arial', 12, 'bold'), background_color='#D9D9D9')],
+                    [sg.Text(item.motorista or 'Nenhum motorista alocado', font=('Arial', 10, 'bold'),
                              background_color='#D9D9D9')]]
-            buttons = [[self.button('Editar', f'edit:{item.id}') if not finish else sg.Text('', background_color='#D9D9D9'),
+            buttons = [[self.button('Editar', f'edit:{item.id}', disableb=True if item.inicio else False) if not finish else sg.Text('', background_color='#D9D9D9'),
                         self.button('Acompanhar' if item.motorista and not item.fim else 'Visualizar', f'view:{item.id}')]]
 
-            card = [[sg.Column(info, background_color='#D9D9D9', pad=((0, 100), (0, 0))), sg.Column(
-                buttons, vertical_alignment=BOTTOM, background_color='#D9D9D9')]]
+            card = [[sg.Column(info, background_color='#D9D9D9', pad=((0, 0), (0, 0))), sg.Column(
+                buttons, vertical_alignment=BOTTOM, background_color='#D9D9D9', expand_x=True, element_justification=RIGHT)]]
 
             cards.append(
-                [sg.Column(card, background_color='#D9D9D9', justification=CENTER, pad=((0, 5), (0, 10)), )])
+                [sg.Column(card, background_color='#D9D9D9', justification=CENTER, pad=((0, 5), (0, 10)), expand_x=True)])
 
         return cards
 
