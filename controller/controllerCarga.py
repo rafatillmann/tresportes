@@ -53,7 +53,8 @@ class ControllerCarga():
             try:
                 button, values = self.__view.edit(carga)
                 if not self.__session.menu(button):
-                    if button == 'cancel':
+                    if button == 'delete':
+                        self.__dao_carga.delete(carga)
                         break
                     elif button == 'save':
                         break

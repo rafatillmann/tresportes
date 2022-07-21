@@ -117,7 +117,7 @@ class ViewCarga(View):
             [sg.InputText(key='endereco')],
         ]
 
-        layout = [[sg.Column(info)], [sg.Column(layoutLoadForm), sg.Column(layoutReceiverForm)], [self.white_button('Descartar', 'cancel'),
+        layout = [[sg.Column(info)], [sg.Column(layoutLoadForm), sg.Column(layoutReceiverForm)], [self.white_button('Excluir', 'delete'),
                                                                                                   self.button('Concluir', 'save', disableb=False)]]
 
         window = self.window(layout)
