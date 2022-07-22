@@ -57,6 +57,7 @@ class ControllerCarga():
                         self.__dao_carga.delete(carga)
                         break
                     elif button == 'save':
+                        self.__dao_carga.update(carga)
                         break
             except Exception:
                 self.__view.popUp()
