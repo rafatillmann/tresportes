@@ -57,7 +57,13 @@ class ControllerCarga():
                         self.__dao_carga.delete(carga)
                         break
                     elif button == 'save':
-                        self.__dao_carga.update(carga)
+                        carga.categoria = self.__dao_categoria.read_by_name(values['categoria'])
+                        carga.descricao = float(values['altura'])
+                        carga.descricao = float(values['largura'])
+                        carga.descricao = float(values['comprimento'])
+                        carga.descricao = float(values['peso'])
+                        carga.descricao = values['descricao']
+                        carga.destinatario = self.__dao_destinatario.readByCPF(int(values['cpf']))
                         break
             except Exception:
                 self.__view.popUp()
