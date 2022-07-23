@@ -1,4 +1,5 @@
 from datetime import datetime
+from venv import create
 from controller.controllerCarga import ControllerCarga
 from dao.daoPercuso import DaoPercurso
 from dao.daoPonto import DaoPonto
@@ -205,7 +206,6 @@ class ControllerRota():
                         break
                     elif button == 'sel':
                         destinations = []
-                        duration = []
                         origins = self.__dao_ponto.getOrigins()
                         if values['select']:
                             for value in values['select']:
@@ -220,22 +220,8 @@ class ControllerRota():
                                     'Não foi possível definir o percurso da rota, tente novamente!')
                                 break
 
-                            for row in matrix.get('rows'):
-                                for element in row.get('elements'):
-                                    duration.append(element.get(
-                                        'duration').get('text'))
-
-                            duration = self.convertTimes(duration)
-
-                            dt = {}
-                            addresses = {}
-                            for i, address in enumerate(matrix.get('destination_addresses')):
-                                dt[address] = duration[i]
-                                addresses[address] = values['select'][i].destinatario.endereco
-
-                            dt = {key: value for key, value in sorted(
-                                dt.items(), key=lambda item: item[1])}
-
+                            dt, addresses = self.createRoute(matrix, values)
+                            
                             if route:
                                 route.tempo_estimado = sum(dt.values())
                                 self.__dao_rota.update(route)
@@ -294,6 +280,25 @@ class ControllerRota():
                 duration.append(minutes)
 
         return duration
+    
+    def createRoute(self, matrix, values):
+        duration = []
+        for row in matrix.get('rows'):
+            for element in row.get('elements'):
+                duration.append(element.get('duration').get('text'))
+
+        duration = self.convertTimes(duration)
+        dt = {}
+        addresses = {}
+        for i, address in enumerate(matrix.get('destination_addresses')):
+            dt[address] = duration[i]
+            addresses[address] = values['select'][i].destinatario.endereco
+
+        dt = {key: value for key, value in sorted(
+            dt.items(), key=lambda item: item[1])}
+
+        return dt, addresses
+    
 
     def allocDriver(self, route):
         while True:
