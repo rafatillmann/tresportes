@@ -94,30 +94,30 @@ class ViewCarga(View):
         layoutLoadForm = [
             [sg.Text('Informações da carga', size=(30, 1))],
             [sg.Text('Descrição', size=(20, 1))],
-            [sg.InputText(key='descricao')],
+            [sg.InputText(carga.descricao, key='descricao')],
             [sg.Text('Carga', size=(20, 1))],
-            [sg.InputText(key='categoria')],
+            [sg.InputText(carga.categoria.nome, key='categoria')],
             [sg.Text('Peso', size=(20, 1))],
-            [sg.InputText(key='peso')],
+            [sg.InputText(carga.peso, key='peso')],
             [sg.Text('Largura', size=(20, 1))],
-            [sg.InputText(key='largura')],
+            [sg.InputText(carga.largura, key='largura')],
             [sg.Text('Altura', size=(20, 1))],
-            [sg.InputText(key='altura')],
+            [sg.InputText(carga.altura, key='altura')],
             [sg.Text('Comprimento', size=(20, 1))],
-            [sg.InputText(key='comprimento')],
+            [sg.InputText(carga.comprimento, key='comprimento')],
         ]
 
         layoutReceiverForm = [
             [sg.Text('Informações do destinatário', size=(30, 1))],
             [sg.Text('CPF/CNPJ', size=(20, 1))],
-            [sg.InputText(key='cpf')],
+            [sg.InputText(carga.destinatario.cpf, key='cpf')],
             [sg.Text('Nome', size=(20, 1))],
-            [sg.InputText(key='nome')],
+            [sg.InputText(carga.destinatario.nome, key='nome')],
             [sg.Text('Endereço', size=(20, 1))],
-            [sg.InputText(key='endereco')],
+            [sg.InputText(carga.destinatario.endereco, key='endereco')],
         ]
 
-        layout = [[sg.Column(info)], [sg.Column(layoutLoadForm), sg.Column(layoutReceiverForm)], [self.white_button('Descartar', 'cancel'),
+        layout = [[sg.Column(info)], [sg.Column(layoutLoadForm), sg.Column(layoutReceiverForm)], [self.white_button('Excluir', 'delete'),
                                                                                                   self.button('Concluir', 'save', disableb=False)]]
 
         window = self.window(layout)

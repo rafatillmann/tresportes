@@ -1,5 +1,4 @@
 from datetime import datetime
-from venv import create
 from controller.controllerCarga import ControllerCarga
 from dao.daoPercuso import DaoPercurso
 from dao.daoPonto import DaoPonto
@@ -81,6 +80,9 @@ class ControllerRota():
                         route)
                     for road in roads:
                         self.__dao_percurso.delete(road)
+                        if road.pontoA != self.__dao_ponto.getOrigins():
+                            self.__dao_ponto.delete(road.pontoA)
+                        self.__dao_ponto.delete(road.pontoB)
 
                     loads = self.__controller_carga.read_by_route(route)
                     for load in loads:
