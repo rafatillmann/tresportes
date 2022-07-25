@@ -41,6 +41,14 @@ class ControllerCarga():
                         categoria = self.__dao_categoria.read_by_name(
                             values['categoria'])
 
+                        if(not cpf_validate(values['cpf'])):
+                            self.__view.popUp("CPF inválido")
+                            break
+
+                        if(not categoria):
+                            self.__view.popUp("Categoria de carga não é válida para transporte")
+                            break
+
                         carga = Carga(categoria, float(values['altura']), float(values['largura']), float(values['comprimento']),
                                       float(values['peso']), values['descricao'], destinatario, None, 'Não alocada')
                         self.__dao_carga.insert(carga)
