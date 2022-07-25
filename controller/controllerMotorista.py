@@ -48,10 +48,13 @@ class ControllerMotorista():
                                     password = passwd.encode()
                                     password = hashlib.md5(
                                         password).hexdigest()
+                                    numbers = [
+                                        char for char in values['cpf'] if char.isdigit()]
+                                    doc = int(''.join(numbers))
                                     veiculo = Veiculo(values['tipo'], values['marca'], values['modelo'],
                                                       values['placa'], int(values['capacidade']), int(values['largura']), int(values['comprimento']), int(values['altura']))
                                     motorista = Motorista(values['nome'], values['email'],
-                                                          int(values['cpf']), password, int(values['carga_horaria']), veiculo)
+                                                          doc, password, int(values['carga_horaria']), veiculo)
 
                                     if self.__dao_veiculo.insert(veiculo) and self.__dao_motorista.insert(motorista):
                                         self.__view.popUp(
@@ -65,8 +68,8 @@ class ControllerMotorista():
                         else:
                             self.__view.popUp(
                                 'Não foi possível finalizar o cadastro, CPF inválido')
-            except Exception:
-                self.__view.popUp()
+            except Exception as e:
+                self.__view.popUp(e)
 
     def update(self, motorista: Motorista):
         while True:

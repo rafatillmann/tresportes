@@ -84,7 +84,6 @@ class ControllerRota():
                             self.__dao_ponto.delete(road.pontoA)
                         self.__dao_ponto.delete(road.pontoB)
 
-                    loads = self.__controller_carga.read_by_route(route)
                     for load in loads:
                         load.rota = None
                         self.__controller_carga.update_data(load)
@@ -223,7 +222,7 @@ class ControllerRota():
                                 break
 
                             dt, addresses = self.createRoute(matrix, values)
-                            
+
                             if route:
                                 route.tempo_estimado = sum(dt.values())
                                 self.__dao_rota.update(route)
@@ -282,7 +281,7 @@ class ControllerRota():
                 duration.append(minutes)
 
         return duration
-    
+
     def createRoute(self, matrix, values):
         duration = []
         for row in matrix.get('rows'):
@@ -300,7 +299,6 @@ class ControllerRota():
             dt.items(), key=lambda item: item[1])}
 
         return dt, addresses
-    
 
     def allocDriver(self, route):
         while True:
