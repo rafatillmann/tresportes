@@ -89,7 +89,7 @@ class ControllerMotorista():
                             if email_validate(values['email']):
                                 veiculo = motorista.veiculo
                                 veiculo.tipo = values['tipo']
-                                veiculo.timarcapo = values['marca']
+                                veiculo.marca = values['marca']
                                 veiculo.modelo = values['modelo']
                                 veiculo.placa = values['placa']
                                 veiculo.capacidade = int(values['capacidade'])
@@ -98,9 +98,13 @@ class ControllerMotorista():
                                     values['comprimento'])
                                 veiculo.altura = int(values['altura'])
 
+                                numbers = [
+                                    char for char in values['cpf'] if char.isdigit()]
+                                doc = int(''.join(numbers))
+
                                 motorista.nome = values['nome']
                                 motorista.email = values['email']
-                                motorista.cpf = values['cpf']
+                                motorista.cpf = doc
                                 motorista.carga_horaria = int(
                                     values['carga_horaria'])
                                 motorista.veiculo = veiculo
