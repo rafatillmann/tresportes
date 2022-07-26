@@ -4,9 +4,9 @@ from model.rota import Rota
 class Incidente():
 
     @abstractmethod
-    def __init__(self, descricao: str, rota: Rota, tipo: int):
+    def __init__(self, data: str, descricao: str, rota: Rota, tipo: str):
         self.__id = None
-        self.__data = datetime.datetime.now()
+        self.__data = data
         self.__descricao = descricao
         self.__rota = rota
         self.__tipo = tipo
