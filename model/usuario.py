@@ -44,8 +44,7 @@ class Usuario(ABC):
         self.__cpf = cpf
 
     @property
-    def senha(self):
-        return self.__senha
+    def senha(self):        return self.__senha
 
     @senha.setter
     def senha(self, senha: str):

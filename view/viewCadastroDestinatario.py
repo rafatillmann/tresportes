@@ -50,12 +50,12 @@ class ViewDestinatario(View):
                           ]
 
         layout = [[sg.Column(layoutForm)], [
-            sg.Button('Cadastrar', key='save')]]
+            sg.Button('Cadastrar', key='save', font=('Arial', 10, 'bold')), sg.Button('Excluir', key='delete', font=('Arial', 10, 'bold'), disabled=True if not destinatario else False)]]
 
         window = self.window(layout)
 
-        while True:
-            button, values = window.read()
+        while True:            
+            button, values = window.read()       
 
             if button == 'save':
                 required = False
@@ -74,6 +74,8 @@ class ViewDestinatario(View):
             else:
                 break
 
+        button, values = window.read()
+        
         window.close()
 
         return button, values

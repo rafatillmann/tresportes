@@ -2,6 +2,7 @@ from sqlite3 import OperationalError
 from dao.abstractDao import AbstractDao
 from database.db import DB
 from model.destinatario import Destinatario
+from dao.daoDestinatario import Destinatario
 
 
 class DaoDestinatario(AbstractDao):
@@ -9,9 +10,11 @@ class DaoDestinatario(AbstractDao):
         self.__database = DB
         self.__table_name = 'destinatario'
         self.__records = []
+        self.__deleted = []
+        self.__dao_destinatario = DaoDestinatario
 
         try:
-            fields = 'id integer NOT NULL, nome varchar(255), email varchar(255), cpf integer, senha varchar(255), cnpj integer, endereco varchar(255) NOT NULL, complemento varchar(255), telefone varchar(255), PRIMARY KEY(id AUTOINCREMENT)'
+            fields = 'id integer NOT NULL, nome varchar(255) NOT NULL, email varchar(255) NOT NULL, cpf integer NOT NULL, senha varchar(255) NOT NULL, cnpj integer, endereco varchar(255) NOT NULL, complemento varchar(255), telefone varchar(255), PRIMARY KEY(id AUTOINCREMENT)'
             self.__database.cursor.execute(
                 f'CREATE TABLE IF NOT EXISTS {self.__table_name} ({fields})')
             self.__database.connection.commit()
@@ -21,11 +24,10 @@ class DaoDestinatario(AbstractDao):
 
     def insert(self, destinatario: Destinatario):
         fields = 'nome, email, cpf, senha, cnpj, endereco, complemento, telefone'
-        values = (destinatario.nome, destinatario.email, destinatario.cpf, destinatario.senha,
-                  destinatario.cnpj, destinatario.endereco, destinatario.complemento, destinatario.telefone)
+        values = f'"{destinatario.nome}", "{destinatario.email}", "{destinatario.cpf}", "{destinatario.senha}", "{destinatario.cnpj}", "{destinatario.endereco}", "{destinatario.complemento}", "{destinatario.telefone}"'
         try:
             self.__database.cursor.execute(
-                f'INSERT INTO {self.__table_name} ({fields}) VALUES(?, ?, ?, ?, ?, ?, ?, ?)', values)
+                f'INSERT INTO {self.__table_name} ({fields}) VALUES({values})')
             self.__database.connection.commit()
 
             destinatario.id = self.__database.cursor.lastrowid
@@ -36,7 +38,7 @@ class DaoDestinatario(AbstractDao):
             return False
 
     def update(self, destinatario: Destinatario):
-        fields = f'nome = ?, email = ?, cpf = ?, senha = ?, cnpj= ?, endereco = ?, complemento = ?, telefone = ?'
+        fields = f'nome = "{destinatario.nome}", email = "{destinatario.email}", cpf = "{destinatario.cpf}", senha = "{destinatario.senha}?, cnpj = "{destinatario.cnpj}", endereco = "{destinatario.endereco}", complemento = "{destinatario.complemento}", telefone = "{destinatario.telefone}"'
         values = (destinatario.nome, destinatario.email, destinatario.cpf, destinatario.senha,
                   destinatario.cnpj, destinatario.endereco, destinatario.complemento, destinatario.telefone)
 
@@ -53,11 +55,13 @@ class DaoDestinatario(AbstractDao):
         try:
             self.__database.cursor.execute(
                 f'DELETE FROM {self.__table_name} WHERE id = {destinatario.id}')
+                # f'UPDATE {self.__table_name} SET deleted =1 WHERE id = {destinatario.id}')
             self.__database.connection.commit()
 
             for record in self.__records:
                 if(record.id == destinatario.id):
                     self.__records.remove(record)
+                    # self.__deleted.append(record)
             return True
         except OperationalError as error:
             self.__database.connection.rollback()
@@ -91,6 +95,15 @@ class DaoDestinatario(AbstractDao):
                                   record[3], record[4], record[5], record[6], record[7], record[8])
             object.id = record[0]
             self.__records.append(object)
-
+            
+        deleted = self.__database.cursor.execute(
+            f'SELECT * FROM {self.__table_name} WHERE deleted=1').fetchall()
+        
+        for delete in deleted:
+            
+            object = Destinatario(delete[1], delete[2],
+                                   delete[3], delete[4], delete[5], record[6], record[7], record[8])
+            object.id = delete[0]
+            self.__deleted.append(object)
 
 DaoDestinatario = DaoDestinatario()

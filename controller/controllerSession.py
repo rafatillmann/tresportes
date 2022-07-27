@@ -9,7 +9,7 @@ class ControllerSession():
 
     def __init__(self):
         self.__controller_motorista = ControllerMotorista(self)
-        self.__controller_destinatatio = ControllerDestinatario(self)
+        self.__controller_destinatario = ControllerDestinatario(self)
         self.__controller_rota = ControllerRota(self)
         self.__controller_carga = ControllerCarga(self)
 
@@ -36,7 +36,7 @@ class ControllerSession():
 
     def session_client(self):
         while True:
-            self.__controller_destinatatio.update()
+            self.__controller_destinatario.update()
 
     def sign_up(self):
-        self.__controller_destinatatio.insert()
+        self.__controller_destinatario.insert()
