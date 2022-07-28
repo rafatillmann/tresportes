@@ -300,16 +300,25 @@ class ControllerRota():
 
         return dt, addresses
 
-    def allocDriver(self, route):
+    def allocDriver(self, route: Rota):
         while True:
             list = self.__dao_motorista.list()
             button, values = self.__view.allocDriver(list)
+            rotas = self.__dao_rota.list()
             if not self.__session.menu(button):
                 if button == 'sel':
                     if len(values['select']) > 0:
                         motorista = values['select'][0]
-                        route.motorista = motorista
-                        self.__dao_rota.update(route)
-                        break
+                        for mot in rotas:
+                            if mot.motorista.id == motorista.id: #verifica se ele já não está alocado em outra rota                            
+                                self.__view.popUp('Motorista já alocado: selecione outro motorista')
+                                break                                
+                            elif motorista.carga_horaria < route.tempo_estimado:
+                                self.__view.popUp('Carga horária do motorista excedida: selecione outro motorista')
+                                break
+                            else:
+                                route.motorista = motorista
+                                self.__dao_rota.update(route)
+                                break
                 elif button == 'back':
                     break
