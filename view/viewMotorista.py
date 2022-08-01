@@ -50,6 +50,8 @@ class ViewMotorista(View):
         layout = [[sg.Text(f'Rota {route.id}', font=('Arial', 20, 'bold'))],
                   [sg.Column(road, vertical_alignment=TOP),
                    sg.Column(loads, vertical_alignment=TOP)],
+                   [sg.Text('Incidentes', font=('Arial', 14, 'bold'))],
+                   [self.button('Relatar', 'incident')],
                   [sg.Sizer(v_pixels=80)],
                   [self.button('Voltar', 'back')]
                   ]

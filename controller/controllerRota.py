@@ -168,6 +168,8 @@ class ControllerRota():
                                     self.__dao_rota.update(route)
                             else:
                                 pass
+                        elif 'incident' in button:
+                            print('INCIDENTEEEEEEEE')
         except Exception as e:
             print(e)
 
