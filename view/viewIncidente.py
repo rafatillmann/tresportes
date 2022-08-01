@@ -9,7 +9,7 @@ class ViewIncidente(View):
     def __init__(self):
         super().__init__()
 
-    def options(self, route):
+    def options(self):
 
         layout = [[sg.Text('Incidente', font=('Arial', 20, 'bold'))],
                   [self.text('Descrição'),

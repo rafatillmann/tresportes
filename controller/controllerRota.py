@@ -1,5 +1,6 @@
 from datetime import datetime
 from controller.controllerCarga import ControllerCarga
+from controller.controllerIncidente import ControllerIncidente
 from dao.daoPercuso import DaoPercurso
 from dao.daoPonto import DaoPonto
 from dao.daoRota import DaoRota
@@ -24,6 +25,7 @@ class ControllerRota():
         self.__dao_percurso = DaoPercurso
         self.__api = API
         self.__controller_carga = ControllerCarga(session)
+        self.__controller_incidente = ControllerIncidente(session)
         self.__view_motorista = ViewMotorista()
         self.__view_incident = ViewIncidente()
         self.__dao_motorista = DaoMotorista
@@ -171,7 +173,7 @@ class ControllerRota():
                             else:
                                 pass
                         elif 'incident' in button:
-                            self.__view_incident.options(route)
+                            self.__controller_incidente.options(route)
         except Exception as e:
             print(e)
 

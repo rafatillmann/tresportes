@@ -3,7 +3,6 @@ from model.rota import Rota
 
 class Incidente():
 
-    @abstractmethod
     def __init__(self, data: str, descricao: str, rota: Rota, tipo: str):
         self.__id = None
         self.__data = data
