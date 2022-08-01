@@ -11,6 +11,7 @@ from model.rota import Rota
 from util.session import Session
 from view.viewRota import ViewRota
 from view.viewMotorista import ViewMotorista
+from view.viewIncidente import ViewIncidente
 
 
 class ControllerRota():
@@ -24,6 +25,7 @@ class ControllerRota():
         self.__api = API
         self.__controller_carga = ControllerCarga(session)
         self.__view_motorista = ViewMotorista()
+        self.__view_incident = ViewIncidente()
         self.__dao_motorista = DaoMotorista
 
     def options(self):
@@ -169,7 +171,7 @@ class ControllerRota():
                             else:
                                 pass
                         elif 'incident' in button:
-                            print('INCIDENTEEEEEEEE')
+                            self.__view_incident.options(route)
         except Exception as e:
             print(e)
 
