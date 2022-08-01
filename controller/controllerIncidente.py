@@ -18,9 +18,8 @@ class ControllerIncidente():
             button, values = self.__view.options()
             if not self.__session.menu(button):
                 if button == 'save':
-                    print(values)
                     incidente = Incidente(datetime.datetime.now() ,values['descricao'], route, values['tipo'])
-                    self.__dao_incidente.insert()
+                    self.__dao_incidente.insert(incidente)
                     break
 
     def read(self, id: int):
