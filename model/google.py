@@ -7,7 +7,7 @@ class Google:
     def __init__(self):
         self.__base_url = 'https://maps.googleapis.com',
         self.__matrix_url = '/maps/api/distancematrix/json'
-        self.key = "AIzaSyDAJE4tTlgb1IGiHDAzf_i30jmdIFzv1nA"
+        self.key = "key"
         self.client = googlemaps.Client(self.key)
 
     def request(self, origins, destinations):
